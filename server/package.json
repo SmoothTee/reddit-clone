@@ -5,7 +5,8 @@
   "main": "src/index.ts",
   "scripts": {
     "watch": "tsc -w",
-    "dev": "nodemon ./build/index.js"
+    "dev": "nodemon ./build/index.js",
+    "migrate": "npx knex migrate:make --migrations-directory ./src/database/migrations -x ts"
   },
   "author": "Joey Liew",
   "license": "MIT",
