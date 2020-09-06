@@ -11,6 +11,7 @@ var connect_redis_1 = __importDefault(require("connect-redis"));
 var config_1 = require("./config");
 var routes_1 = require("./routes");
 var constants_1 = require("./constants");
+var middlewares_1 = require("./middlewares");
 var initializeExpress = function () {
     var app = express_1.default();
     var redisStore = connect_redis_1.default(express_session_1.default);
@@ -34,6 +35,7 @@ var initializeExpress = function () {
         },
     }));
     app.use('/api', routes_1.routes);
+    app.use(middlewares_1.error);
     app.listen(config_1.config.port, function () {
         return console.log("Server listening on port " + config_1.config.port);
     });

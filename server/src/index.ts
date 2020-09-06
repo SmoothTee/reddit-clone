@@ -7,6 +7,7 @@ import connectRedis from 'connect-redis';
 import { config } from './config';
 import { routes } from './routes';
 import { __prod__ } from './constants';
+import { error } from './middlewares';
 
 const initializeExpress = () => {
   const app = express();
@@ -35,6 +36,8 @@ const initializeExpress = () => {
   );
 
   app.use('/api', routes);
+
+  app.use(error);
 
   app.listen(config.port, () =>
     console.log(`Server listening on port ${config.port}`)
