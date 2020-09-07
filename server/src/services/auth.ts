@@ -13,11 +13,13 @@ export interface User {
   updated_at: string;
 }
 
+type UserWithoutPassword = Omit<User, 'password'>;
+
 export const register = async (
   data: Omit<User, 'id' | 'created_at' | 'updated_at'> & {
     confirmPassword: string;
   }
-): Promise<Omit<User, 'password'>> => {
+): Promise<UserWithoutPassword> => {
   const hashedPassword = await bcrypt.hash(data.password, 12);
 
   const { confirmPassword: _, ...rest } = data;
@@ -57,7 +59,7 @@ export const register = async (
 
 export const login = async (
   data: Pick<User, 'username' | 'password'>
-): Promise<Omit<User, 'password'>> => {
+): Promise<UserWithoutPassword> => {
   const { username, password } = data;
   const user = await db('users').first().where({ username });
   if (!user) {
@@ -70,6 +72,14 @@ export const login = async (
     throw new AppError(422, 'Invalid Password', {
       password: 'Password is invalid',
     });
+  }
+  return userSerializer(user);
+};
+
+export const me = async (userId: number): Promise<UserWithoutPassword> => {
+  const user = await db('users').first().where({ id: userId });
+  if (!user) {
+    throw new AppError(404, 'Invalid session.');
   }
   return userSerializer(user);
 };

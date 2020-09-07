@@ -30,3 +30,9 @@ export const logout = catchError(async (req, res) => {
   });
   res.json({ success });
 });
+
+export const me = catchError(async (req, res) => {
+  const user = await authService.me(req.session.userId);
+
+  res.json({ user });
+});
