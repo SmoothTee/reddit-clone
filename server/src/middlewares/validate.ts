@@ -27,6 +27,11 @@ export const validateSchemas = {
     title: Joi.string().max(300).required(),
     body: Joi.string().max(40000),
   }),
+  createComment: Joi.object({
+    parent_id: Joi.number(),
+    post_id: Joi.number().required(),
+    body: Joi.string().max(40000).required(),
+  }),
 };
 
 export const validate = (
