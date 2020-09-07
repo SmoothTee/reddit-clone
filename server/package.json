@@ -6,7 +6,9 @@
   "scripts": {
     "watch": "tsc -w",
     "dev": "nodemon ./build/index.js",
-    "migrate": "npx knex migrate:make --migrations-directory ./src/database/migrations -x ts"
+    "migrate:make": "npx knex migrate:make --knexfile ./src/database/knexfile.ts",
+    "migrate:latest": "npx knex migrate:latest --knexfile ./src/database/knexfile.ts",
+    "migrate:rollback": "npx knex migrate:rollback --knexfile ./src/database/knexfile.ts"
   },
   "author": "Joey Liew",
   "license": "MIT",
@@ -37,6 +39,7 @@
     "lint-staged": "^10.3.0",
     "nodemon": "^2.0.4",
     "prettier": "^2.1.1",
+    "ts-node": "^9.0.0",
     "typescript": "^4.0.2"
   },
   "husky": {

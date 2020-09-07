@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.error = void 0;
-var appError_1 = require("../utils/appError");
-var constants_1 = require("../constants");
-exports.error = function (err, _req, res, _next) {
+const appError_1 = require("../utils/appError");
+const constants_1 = require("../constants");
+exports.error = (err, _req, res, _next) => {
     if (err instanceof appError_1.AppError) {
         res.status(err.statusCode).json({ message: err.message, data: err.data });
         return;

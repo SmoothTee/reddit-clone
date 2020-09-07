@@ -4,9 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.validate = exports.validateSchemas = void 0;
-var joi_1 = __importDefault(require("joi"));
-var utils_1 = require("../utils");
-var appError_1 = require("../utils/appError");
+const joi_1 = __importDefault(require("joi"));
+const utils_1 = require("../utils");
+const appError_1 = require("../utils/appError");
 exports.validateSchemas = {
     register: joi_1.default.object({
         username: joi_1.default.string().min(2).max(32).required(),
@@ -15,17 +15,15 @@ exports.validateSchemas = {
         confirmPassword: joi_1.default.string().required().valid(joi_1.default.ref('password')),
     }),
 };
-exports.validate = function (schema, prop) {
-    return utils_1.catchError(function (req, _res, next) {
-        var error = schema.validate(req[prop], { abortEarly: false }).error;
-        if (error) {
-            throw new appError_1.AppError(422, 'Invalid input values.', formatError(error));
-        }
-        next();
-    });
-};
-var formatError = function (error) {
-    return error.details.reduce(function (acc, curr) {
+exports.validate = (schema, prop) => utils_1.catchError((req, _res, next) => {
+    const { error } = schema.validate(req[prop], { abortEarly: false });
+    if (error) {
+        throw new appError_1.AppError(422, 'Invalid input values.', formatError(error));
+    }
+    next();
+});
+const formatError = (error) => {
+    return error.details.reduce((acc, curr) => {
         acc[curr.path[0]] = curr.message;
         return acc;
     }, {});
