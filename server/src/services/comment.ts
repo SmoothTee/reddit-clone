@@ -28,24 +28,35 @@ export const createComment = async (
 
     return comment;
   } catch (err) {
+    // Invalid post id or parent comment id.
     if (err.code === '23503') {
+      // Invalid post id.
       if (err.detail.includes('post_id')) {
+        // Parent comment id from request.
         if (data.parent_id) {
           const commentId = await db('comments')
             .first()
             .where({ id: data.parent_id });
+          // Invalid parent comment id.
           if (!commentId) {
             throw new AppError(404, 'Invalid post and parent id', {
               parent_id: `Comment with id ${data.parent_id} not found`,
               post_id: `Post with id ${data.post_id} not found`,
             });
+          } else {
+            // Valid parent comment id, but invalid post id.
+            throw new AppError(404, 'Invalid post id', {
+              post_id: `Post with id ${data.post_id} not found`,
+            });
           }
         } else {
+          // No parent comment id given and invalid post id.
           throw new AppError(404, 'Invalid post id', {
             post_id: `Post with id ${data.post_id} not found`,
           });
         }
       } else {
+        // Invalid parent comment id.
         throw new AppError(404, 'Invalid parent id', {
           parent_id: `Comment with id ${data.parent_id} not found`,
         });
