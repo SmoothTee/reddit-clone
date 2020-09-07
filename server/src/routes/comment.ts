@@ -13,5 +13,11 @@ router
     validate(validateSchemas.createComment, 'body'),
     commentController.createComment
   );
+router.post(
+  '/vote',
+  protect,
+  validate(validateSchemas.voteComment, 'body'),
+  commentController.voteComment
+);
 
 export const comment = router;

@@ -9,3 +9,12 @@ export const createComment = catchError(async (req, res) => {
 
   res.json({ comment });
 });
+
+export const voteComment = catchError(async (req, res) => {
+  const { commentVote, action } = await commentService.voteComment(
+    req.body,
+    req.session.userId
+  );
+
+  res.json({ commentVote, action });
+});

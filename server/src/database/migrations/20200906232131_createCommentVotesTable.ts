@@ -15,7 +15,7 @@ export async function up(knex: Knex): Promise<void> {
       .inTable('comments')
       .unsigned()
       .notNullable();
-    table.enum('vote', [1, -1]).notNullable();
+    table.integer('vote').notNullable();
     table.timestamps(true, true);
   });
 }
