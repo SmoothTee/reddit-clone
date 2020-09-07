@@ -22,6 +22,11 @@ export const validateSchemas = {
   becomeMember: Joi.object({
     communityId: Joi.number().required(),
   }),
+  createPost: Joi.object({
+    community_id: Joi.number().required(),
+    title: Joi.string().max(300).required(),
+    body: Joi.string().max(40000),
+  }),
 };
 
 export const validate = (
