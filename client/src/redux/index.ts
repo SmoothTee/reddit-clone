@@ -2,11 +2,13 @@ import reduxThunk from "redux-thunk";
 import { createStore, applyMiddleware, compose, combineReducers } from "redux";
 
 import { auth } from "./auth";
+import { modal } from "./modal";
 import { AppReducerParameters } from "./types";
 import { LOGOUT_SUCCESS } from "./auth/constants";
 
 export const appReducer = combineReducers({
   auth,
+  modal,
 });
 
 const rootReducer = (

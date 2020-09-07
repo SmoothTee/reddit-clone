@@ -1,9 +1,13 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 
 import styles from "./NavBar.module.css";
 import { Button } from "../../../Button";
+import { showModal } from "../../../../redux/modal/actions";
 
 export const NavBar = () => {
+  const dispatch = useDispatch();
+
   return (
     <nav className={styles.nav_bar}>
       <ul className={styles.list}>
@@ -11,7 +15,9 @@ export const NavBar = () => {
           <Button>Log In</Button>
         </li>
         <li className={styles.list_item}>
-          <Button>Sign Up</Button>
+          <Button onClick={() => dispatch(showModal("RegisterModal"))}>
+            Sign Up
+          </Button>
         </li>
       </ul>
     </nav>
