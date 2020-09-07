@@ -23,16 +23,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.register = void 0;
+exports.login = exports.register = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const database_1 = require("../database");
 const appError_1 = require("../utils/appError");
+const serializer_1 = require("../utils/serializer");
 exports.register = (data) => __awaiter(void 0, void 0, void 0, function* () {
     const hashedPassword = yield bcrypt_1.default.hash(data.password, 12);
     const { confirmPassword: _ } = data, rest = __rest(data, ["confirmPassword"]);
     try {
         const user = (yield database_1.db('users').insert(Object.assign(Object.assign({}, rest), { password: hashedPassword }), '*'))[0];
-        return user;
+        return serializer_1.userSerializer(user);
     }
     catch (err) {
         if (err.code === '23505') {
@@ -62,5 +63,21 @@ exports.register = (data) => __awaiter(void 0, void 0, void 0, function* () {
             throw err;
         }
     }
+});
+exports.login = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    const { username, password } = data;
+    const user = yield database_1.db('users').first().where({ username });
+    if (!user) {
+        throw new appError_1.AppError(404, 'User not found', {
+            username: 'Username not found',
+        });
+    }
+    const match = yield bcrypt_1.default.compare(password, user.password);
+    if (!match) {
+        throw new appError_1.AppError(422, 'Invalid Password', {
+            password: 'Password is invalid',
+        });
+    }
+    return serializer_1.userSerializer(user);
 });
 //# sourceMappingURL=auth.js.map

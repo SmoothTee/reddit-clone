@@ -14,6 +14,10 @@ exports.validateSchemas = {
         password: joi_1.default.string().min(6).required(),
         confirmPassword: joi_1.default.string().required().valid(joi_1.default.ref('password')),
     }),
+    login: joi_1.default.object({
+        username: joi_1.default.string().required(),
+        password: joi_1.default.string().required(),
+    }),
 };
 exports.validate = (schema, prop) => utils_1.catchError((req, _res, next) => {
     const { error } = schema.validate(req[prop], { abortEarly: false });

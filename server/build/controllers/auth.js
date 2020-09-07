@@ -9,11 +9,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.register = void 0;
+exports.login = exports.register = void 0;
 const utils_1 = require("../utils");
 const services_1 = require("../services");
 exports.register = utils_1.catchError((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield services_1.authService.register(req.body);
+    req.session.userId = user.id;
+    res.json({ user });
+}));
+exports.login = utils_1.catchError((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield services_1.authService.login(req.body);
     req.session.userId = user.id;
     res.json({ user });
 }));

@@ -12,6 +12,10 @@ export const validateSchemas = {
     password: Joi.string().min(6).required(),
     confirmPassword: Joi.string().required().valid(Joi.ref('password')),
   }),
+  login: Joi.object({
+    username: Joi.string().required(),
+    password: Joi.string().required(),
+  }),
 };
 
 export const validate = (

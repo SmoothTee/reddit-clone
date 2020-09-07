@@ -2,8 +2,9 @@ import bcrypt from 'bcrypt';
 
 import { db } from '../database';
 import { AppError } from '../utils/appError';
+import { userSerializer } from '../utils/serializer';
 
-interface User {
+export interface User {
   id: number;
   username: string;
   email: string;
@@ -16,7 +17,7 @@ export const register = async (
   data: Omit<User, 'id' | 'created_at' | 'updated_at'> & {
     confirmPassword: string;
   }
-): Promise<User> => {
+): Promise<Omit<User, 'password'>> => {
   const hashedPassword = await bcrypt.hash(data.password, 12);
 
   const { confirmPassword: _, ...rest } = data;
@@ -25,7 +26,7 @@ export const register = async (
     const user = (
       await db<User>('users').insert({ ...rest, password: hashedPassword }, '*')
     )[0];
-    return user;
+    return userSerializer(user);
   } catch (err) {
     // Violates unique constraints.
     if (err.code === '23505') {
@@ -52,4 +53,23 @@ export const register = async (
       throw err;
     }
   }
+};
+
+export const login = async (
+  data: Pick<User, 'username' | 'password'>
+): Promise<Omit<User, 'password'>> => {
+  const { username, password } = data;
+  const user = await db('users').first().where({ username });
+  if (!user) {
+    throw new AppError(404, 'User not found', {
+      username: 'Username not found',
+    });
+  }
+  const match = await bcrypt.compare(password, user.password);
+  if (!match) {
+    throw new AppError(422, 'Invalid Password', {
+      password: 'Password is invalid',
+    });
+  }
+  return userSerializer(user);
 };
