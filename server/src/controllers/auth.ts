@@ -1,5 +1,6 @@
 import { catchError } from '../utils';
 import { authService } from '../services';
+import { config } from '../config';
 
 export const register = catchError(async (req, res) => {
   const user = await authService.register(req.body);
@@ -15,4 +16,17 @@ export const login = catchError(async (req, res) => {
   req.session.userId = user.id;
 
   res.json({ user });
+});
+
+export const logout = catchError(async (req, res) => {
+  const success = await new Promise((resolve) => {
+    req.session.destroy((err) => {
+      if (err) {
+        resolve(false);
+      }
+      res.clearCookie(config.sessionName);
+      resolve(true);
+    });
+  });
+  res.json({ success });
 });

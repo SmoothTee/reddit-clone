@@ -9,9 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.login = exports.register = void 0;
+exports.logout = exports.login = exports.register = void 0;
 const utils_1 = require("../utils");
 const services_1 = require("../services");
+const config_1 = require("../config");
 exports.register = utils_1.catchError((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield services_1.authService.register(req.body);
     req.session.userId = user.id;
@@ -21,5 +22,17 @@ exports.login = utils_1.catchError((req, res) => __awaiter(void 0, void 0, void 
     const user = yield services_1.authService.login(req.body);
     req.session.userId = user.id;
     res.json({ user });
+}));
+exports.logout = utils_1.catchError((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const success = yield new Promise((resolve) => {
+        req.session.destroy((err) => {
+            if (err) {
+                resolve(false);
+            }
+            res.clearCookie(config_1.config.sessionName);
+            resolve(true);
+        });
+    });
+    res.json({ success });
 }));
 //# sourceMappingURL=auth.js.map

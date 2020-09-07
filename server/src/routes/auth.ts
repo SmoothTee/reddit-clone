@@ -15,5 +15,6 @@ router.post(
   validate(validateSchemas.login, 'body'),
   authController.login
 );
+router.get('/logout', authController.logout);
 
 export const auth = router;
