@@ -6,3 +6,12 @@ export const createPost = catchError(async (req, res) => {
 
   res.json({ post });
 });
+
+export const votePost = catchError(async (req, res) => {
+  const { postVote, action } = await postService.votePost(
+    req.body,
+    req.session.userId
+  );
+
+  res.json({ postVote, action });
+});

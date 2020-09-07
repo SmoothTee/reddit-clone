@@ -3,11 +3,17 @@ import * as Knex from 'knex';
 export async function up(knex: Knex): Promise<void> {
   return knex.schema.createTable('community_members', (table) => {
     table.primary(['user_id', 'community_id']);
-    table.integer('user_id').references('id').inTable('users').notNullable();
+    table
+      .integer('user_id')
+      .references('id')
+      .inTable('users')
+      .unsigned()
+      .notNullable();
     table
       .integer('community_id')
       .references('id')
       .inTable('communities')
+      .unsigned()
       .notNullable();
     table.timestamps(true, true);
   });

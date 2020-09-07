@@ -13,5 +13,11 @@ router
     validate(validateSchemas.createPost, 'body'),
     postController.createPost
   );
+router.post(
+  '/vote',
+  protect,
+  validate(validateSchemas.votePost, 'body'),
+  postController.votePost
+);
 
 export const post = router;
