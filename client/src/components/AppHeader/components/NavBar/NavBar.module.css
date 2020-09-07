@@ -1,0 +1,15 @@
+.nav_bar {
+  display: flex;
+  align-items: center;
+}
+
+.list {
+  display: flex;
+  align-items: center;
+  padding: 0;
+  list-style-type: none;
+}
+
+.list > *:not(:last-child) {
+  margin-right: 1rem;
+}

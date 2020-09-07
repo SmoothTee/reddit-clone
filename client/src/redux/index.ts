@@ -3,7 +3,7 @@ import { createStore, applyMiddleware, compose, combineReducers } from "redux";
 
 import { auth } from "./auth";
 import { AppReducerParameters } from "./types";
-import { LOGOUT_SUCCESS } from "./auth/actions";
+import { LOGOUT_SUCCESS } from "./auth/constants";
 
 export const appReducer = combineReducers({
   auth,
@@ -23,7 +23,7 @@ const middlewares = [reduxThunk];
 const composeEnhancers =
   (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const store = createStore(
+export const store = createStore(
   rootReducer,
   composeEnhancers(applyMiddleware(...middlewares))
 );

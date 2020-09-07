@@ -1,6 +1,13 @@
-import { REGISTER_REQUEST } from "./actions";
+import {
+  REGISTER_REQUEST,
+  LOGOUT_SUCCESS,
+  REGISTER_SUCCESS,
+  REGISTER_FAILURE,
+  LOGOUT_REQUEST,
+  LOGOUT_FAILURE,
+} from "./constants";
 
-interface User {
+export interface User {
   id: number;
   username: string;
   email: string;
@@ -20,4 +27,33 @@ interface RegisterRequestAction {
   type: typeof REGISTER_REQUEST;
 }
 
-export type AuthActionTypes = RegisterRequestAction;
+interface RegisterSuccessAction {
+  type: typeof REGISTER_SUCCESS;
+  payload: User;
+}
+
+interface RegisterFailureAction {
+  type: typeof REGISTER_FAILURE;
+  error: any;
+}
+
+interface LogoutRequestAction {
+  type: typeof LOGOUT_REQUEST;
+}
+
+interface LogoutSuccessAction {
+  type: typeof LOGOUT_SUCCESS;
+}
+
+interface LogoutFailureAction {
+  type: typeof LOGOUT_FAILURE;
+  error: any;
+}
+
+export type AuthActionTypes =
+  | RegisterRequestAction
+  | RegisterSuccessAction
+  | RegisterFailureAction
+  | LogoutRequestAction
+  | LogoutSuccessAction
+  | LogoutFailureAction;
