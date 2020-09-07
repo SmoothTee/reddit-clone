@@ -16,6 +16,12 @@ export const validateSchemas = {
     username: Joi.string().required(),
     password: Joi.string().required(),
   }),
+  createCommunity: Joi.object({
+    name: Joi.string().min(2).max(20).required(),
+  }),
+  becomeMember: Joi.object({
+    communityId: Joi.number().required(),
+  }),
 };
 
 export const validate = (

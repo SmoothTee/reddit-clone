@@ -14,3 +14,9 @@ export class AppError extends Error {
     Object.setPrototypeOf(this, AppError.prototype);
   }
 }
+
+export class DuplicationError extends AppError {
+  constructor(data: { [key: string]: string }) {
+    super(409, 'Duplication error', data);
+  }
+}

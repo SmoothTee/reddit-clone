@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 
 import { db } from '../database';
-import { AppError } from '../utils/appError';
+import { AppError, DuplicationError } from '../utils/appError';
 import { userSerializer } from '../utils/serializer';
 
 export interface User {
@@ -37,17 +37,17 @@ export const register = async (
           .first()
           .where({ email: data.email });
         if (userWithEmail) {
-          throw new AppError(409, 'Duplication error', {
+          throw new DuplicationError({
             username: 'Username is already taken',
             email: 'Email is already taken',
           });
         } else {
-          throw new AppError(409, 'Duplication error', {
+          throw new DuplicationError({
             username: 'Username is already taken',
           });
         }
       } else {
-        throw new AppError(409, 'Duplication error', {
+        throw new DuplicationError({
           email: 'Email is already taken',
         });
       }
