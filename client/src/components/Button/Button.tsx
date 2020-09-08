@@ -1,9 +1,9 @@
-import React, { ReactNode, HTMLAttributes } from "react";
+import React, { HTMLProps } from "react";
 
 import styles from "./Button.module.css";
 
-interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
-  children: ReactNode;
+interface ButtonProps extends HTMLProps<HTMLButtonElement> {
+  type?: "submit";
 }
 
 export const Button = ({ children, ...props }: ButtonProps) => {

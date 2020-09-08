@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@hookform/resolvers": "^0.1.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
@@ -13,8 +14,10 @@
     "@types/react-modal": "^3.10.6",
     "@types/react-redux": "^7.1.9",
     "@types/react-router-dom": "^5.1.5",
+    "@types/yup": "^0.29.6",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-hook-form": "^6.7.2",
     "react-icons": "^3.11.0",
     "react-modal": "^3.11.2",
     "react-redux": "^7.2.1",
@@ -22,7 +25,8 @@
     "react-scripts": "3.4.3",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "typescript": "^3.7.5"
+    "typescript": "^3.7.5",
+    "yup": "^0.29.3"
   },
   "scripts": {
     "start": "react-scripts start",
