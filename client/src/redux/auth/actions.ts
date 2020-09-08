@@ -6,6 +6,9 @@ import {
   LOGOUT_REQUEST,
   LOGOUT_SUCCESS,
   LOGOUT_FAILURE,
+  LOGIN_SUCCESS,
+  LOGIN_REQUEST,
+  LOGIN_FAILURE,
 } from "./constants";
 import { AppThunk } from "../types";
 import { clientFetch } from "../../utils/clientFetch";
@@ -23,6 +26,20 @@ const registerSuccess = (payload: User): AuthActionTypes => ({
 
 const registerFailure = (error: any): AuthActionTypes => ({
   type: REGISTER_FAILURE,
+  error,
+});
+
+const loginRequest = (): AuthActionTypes => ({
+  type: LOGIN_REQUEST,
+});
+
+const loginSuccess = (payload: User): AuthActionTypes => ({
+  type: LOGIN_SUCCESS,
+  payload,
+});
+
+const loginFailure = (error: any): AuthActionTypes => ({
+  type: LOGIN_FAILURE,
   error,
 });
 
@@ -46,9 +63,7 @@ export const registerAction = <T>(body: T): AppThunk => async (dispatch) => {
       body,
     });
     if (success) {
-      console.log("Reset Error");
       dispatch(resetError());
-      console.log("Hide Modal");
       dispatch(hideModal());
       dispatch(registerSuccess(res.user));
     } else {
@@ -56,6 +71,24 @@ export const registerAction = <T>(body: T): AppThunk => async (dispatch) => {
     }
   } catch (err) {
     dispatch(registerFailure(`Failed to register: ${err}`));
+  }
+};
+
+export const loginAction = <T>(body: T): AppThunk => async (dispatch) => {
+  try {
+    dispatch(loginRequest());
+    const { success, res } = await clientFetch<T>("/api/auth/login", {
+      body,
+    });
+    if (success) {
+      dispatch(resetError());
+      dispatch(hideModal());
+      dispatch(loginSuccess(res.user));
+    } else {
+      dispatch(loginFailure(res));
+    }
+  } catch (err) {
+    dispatch(loginFailure(`Failed to login: ${err}`));
   }
 };
 

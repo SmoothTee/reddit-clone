@@ -12,7 +12,9 @@ export const NavBar = () => {
     <nav className={styles.nav_bar}>
       <ul className={styles.list}>
         <li className={styles.list_item}>
-          <Button>Log In</Button>
+          <Button onClick={() => dispatch(showModal("LoginModal"))}>
+            Log In
+          </Button>
         </li>
         <li className={styles.list_item}>
           <Button onClick={() => dispatch(showModal("RegisterModal"))}>

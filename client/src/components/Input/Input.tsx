@@ -36,6 +36,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               event.preventDefault();
               setShowPassword(!showPassword);
             }}
+            type="button"
           >
             {showPassword ? <MdVisibility /> : <MdVisibilityOff />}
           </button>
