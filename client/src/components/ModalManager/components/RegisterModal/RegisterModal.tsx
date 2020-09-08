@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers";
@@ -7,6 +7,9 @@ import styles from "./RegisterModal.module.css";
 import { RootModal } from "../RootModal";
 import { Input } from "../../../Input";
 import { Button } from "../../../Button";
+import { useDispatch } from "react-redux";
+import { registerAction } from "../../../../redux/auth/actions";
+import { useTypedSelector } from "../../../../redux/hooks";
 
 interface IFormInputs {
   username: string;
@@ -29,11 +32,31 @@ const schema = yup.object().shape({
 });
 
 export const RegisterModal = () => {
-  const { register, handleSubmit, errors, formState } = useForm<IFormInputs>({
+  const dispatch = useDispatch();
+
+  const isFetching = useTypedSelector((state) => state.auth.isFetching);
+  const error = useTypedSelector((state) => state.error);
+
+  const { register, handleSubmit, errors, setError, formState } = useForm<
+    IFormInputs
+  >({
     resolver: yupResolver(schema),
     mode: "all",
   });
-  const onSubmit = (data: IFormInputs) => console.log(data);
+  const onSubmit = (data: IFormInputs) => {
+    dispatch(registerAction<IFormInputs>(data));
+  };
+
+  useEffect(() => {
+    if (error && error.data) {
+      Object.entries(error.data).forEach((err) =>
+        setError(err[0] as keyof IFormInputs, {
+          type: "manual",
+          message: err[1] as string,
+        })
+      );
+    }
+  }, [error, setError]);
 
   return (
     <RootModal>
@@ -68,7 +91,13 @@ export const RegisterModal = () => {
               : ""
           }
         />
-        <Button type="submit">Register</Button>
+        <Button
+          type="submit"
+          disabled={!formState.isValid}
+          loading={isFetching}
+        >
+          Register
+        </Button>
       </form>
     </RootModal>
   );

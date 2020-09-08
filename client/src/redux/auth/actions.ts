@@ -9,6 +9,8 @@ import {
 } from "./constants";
 import { AppThunk } from "../types";
 import { clientFetch } from "../../utils/clientFetch";
+import { resetError } from "../error/actions";
+import { hideModal } from "../modal/actions";
 
 const registerRequest = (): AuthActionTypes => ({
   type: REGISTER_REQUEST,
@@ -44,6 +46,10 @@ export const registerAction = <T>(body: T): AppThunk => async (dispatch) => {
       body,
     });
     if (success) {
+      console.log("Reset Error");
+      dispatch(resetError());
+      console.log("Hide Modal");
+      dispatch(hideModal());
       dispatch(registerSuccess(res.user));
     } else {
       dispatch(registerFailure(res));
