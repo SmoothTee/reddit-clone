@@ -9,6 +9,9 @@ import {
   LOGIN_SUCCESS,
   LOGIN_REQUEST,
   LOGIN_FAILURE,
+  ME_REQUEST,
+  ME_SUCCESS,
+  ME_FAILURE,
 } from "./constants";
 import { AppThunk } from "../types";
 import { clientFetch } from "../../utils/clientFetch";
@@ -53,6 +56,20 @@ const logoutSuccess = (): AuthActionTypes => ({
 
 const logoutFailure = (error?: any): AuthActionTypes => ({
   type: LOGOUT_FAILURE,
+  error,
+});
+
+const meRequest = (): AuthActionTypes => ({
+  type: ME_REQUEST,
+});
+
+const meSuccess = (payload: User): AuthActionTypes => ({
+  type: ME_SUCCESS,
+  payload,
+});
+
+const meFailure = (error: any): AuthActionTypes => ({
+  type: ME_FAILURE,
   error,
 });
 
@@ -103,5 +120,19 @@ export const logoutAction = (): AppThunk => async (dispatch) => {
     }
   } catch (err) {
     dispatch(logoutFailure(`Failed to logout: ${err}`));
+  }
+};
+
+export const meAction = (): AppThunk => async (dispatch) => {
+  try {
+    dispatch(meRequest());
+    const { success, res } = await clientFetch("/api/auth/me");
+    if (success) {
+      dispatch(meSuccess(res.user));
+    } else {
+      dispatch(meFailure(res));
+    }
+  } catch (err) {
+    dispatch(meFailure(`Failed to me: ${err}`));
   }
 };

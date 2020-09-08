@@ -64,3 +64,17 @@ export const becomeMember = async (
     }
   }
 };
+
+export const readCommunities = async (): Promise<Community[]> => {
+  const communities = await db<Community>('communities')
+    .select('communities.*')
+    .count('community_members.user_id as numOfMembers')
+    .leftJoin<CommunityMember>(
+      'community_members',
+      'community_members.community_id',
+      'communities.id'
+    )
+    .groupBy('communities.id');
+
+  return communities;
+};

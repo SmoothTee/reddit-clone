@@ -3,6 +3,8 @@ import { Action } from "redux";
 
 import { appReducer } from "./index";
 import { AuthActionTypes } from "./auth/types";
+import { ModalActionTypes } from "./modal/types";
+import { CommunityActionTypes } from "./community/types";
 
 export type AppReducerParameters = Parameters<typeof appReducer>;
 
@@ -15,4 +17,7 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   Action<string>
 >;
 
-export type ActionTypes = AuthActionTypes;
+export type ActionTypes =
+  | AuthActionTypes
+  | ModalActionTypes
+  | CommunityActionTypes;

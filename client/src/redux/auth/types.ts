@@ -8,6 +8,9 @@ import {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
+  ME_REQUEST,
+  ME_SUCCESS,
+  ME_FAILURE,
 } from "./constants";
 
 export interface User {
@@ -67,6 +70,20 @@ interface LogoutFailureAction {
   error: any;
 }
 
+interface MeRequestAction {
+  type: typeof ME_REQUEST;
+}
+
+interface MeSuccessAction {
+  type: typeof ME_SUCCESS;
+  payload: User;
+}
+
+interface MeFailureAction {
+  type: typeof ME_FAILURE;
+  error: any;
+}
+
 export type AuthActionTypes =
   | RegisterRequestAction
   | RegisterSuccessAction
@@ -76,4 +93,7 @@ export type AuthActionTypes =
   | LoginFailureAction
   | LogoutRequestAction
   | LogoutSuccessAction
-  | LogoutFailureAction;
+  | LogoutFailureAction
+  | MeRequestAction
+  | MeSuccessAction
+  | MeFailureAction;

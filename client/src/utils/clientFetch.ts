@@ -20,7 +20,7 @@ export const clientFetch = async <T>(
 
   const res = await fetch(endpoint, fetchOpts);
   const resObj = await res.json();
-  if (res.status === 401) {
+  if (res.status === 401 && endpoint !== "/api/auth/me") {
     (store.dispatch as ThunkDispatch<RootState, void, ActionTypes>)(
       logoutAction()
     );

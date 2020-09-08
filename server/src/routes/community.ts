@@ -6,12 +6,14 @@ import { protect } from '../middlewares/protect';
 
 const router = Router();
 
-router.post(
-  '/',
-  protect,
-  validate(validateSchemas.createCommunity, 'body'),
-  communityController.createCommunity
-);
+router
+  .route('/')
+  .post(
+    protect,
+    validate(validateSchemas.createCommunity, 'body'),
+    communityController.createCommunity
+  )
+  .get(communityController.readCommunities);
 router.post(
   '/become-member',
   protect,

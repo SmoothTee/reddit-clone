@@ -13,3 +13,14 @@
 .list > *:not(:last-child) {
   margin-right: 1rem;
 }
+
+.icon_link {
+  display: flex;
+  border-radius: 50%;
+  padding: 0.5rem;
+  color: black;
+}
+
+.icon_link:hover {
+  background: var(--yellow);
+}
