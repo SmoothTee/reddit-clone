@@ -15,3 +15,9 @@ export const votePost = catchError(async (req, res) => {
 
   res.json({ postVote, action });
 });
+
+export const readPosts = catchError(async (req, res) => {
+  const data = await postService.readPosts(req.query);
+
+  res.json({ data });
+});

@@ -1,7 +1,7 @@
 import { db } from '../database';
 import { AppError, DuplicationError } from '../utils/appError';
 
-interface Community {
+export interface Community {
   id: number;
   creator_id: number;
   name: string;

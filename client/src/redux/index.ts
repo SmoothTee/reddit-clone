@@ -8,12 +8,14 @@ import { community } from "./community";
 import { entities } from "./entities";
 import { AppReducerParameters } from "./types";
 import { LOGOUT_SUCCESS } from "./auth/constants";
+import { homePosts } from "./post";
 
 export const appReducer = combineReducers({
   auth,
   modal,
   error,
   community,
+  homePosts,
   entities,
 });
 

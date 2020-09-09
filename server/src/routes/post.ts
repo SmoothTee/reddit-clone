@@ -12,7 +12,8 @@ router
     protect,
     validate(validateSchemas.createPost, 'body'),
     postController.createPost
-  );
+  )
+  .get(postController.readPosts);
 router.post(
   '/vote',
   protect,

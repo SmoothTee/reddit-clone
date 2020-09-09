@@ -5,6 +5,7 @@ import { appReducer } from "./index";
 import { AuthActionTypes } from "./auth/types";
 import { ModalActionTypes } from "./modal/types";
 import { CommunityActionTypes } from "./community/types";
+import { PostActionTypes } from "./post/types";
 
 export type AppReducerParameters = Parameters<typeof appReducer>;
 
@@ -20,4 +21,5 @@ export type AppThunk<ReturnType = void> = ThunkAction<
 export type ActionTypes =
   | AuthActionTypes
   | ModalActionTypes
-  | CommunityActionTypes;
+  | CommunityActionTypes
+  | PostActionTypes;

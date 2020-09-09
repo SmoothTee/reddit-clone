@@ -1,5 +1,10 @@
+import { Request } from 'express';
+
 import { db } from '../database';
 import { AppError } from '../utils/appError';
+import { User } from './auth';
+import { Community } from './community';
+import { userSerializer } from '../utils/serializer';
 
 interface Post {
   id: number;
@@ -89,4 +94,52 @@ export const votePost = async (
       throw err;
     }
   }
+};
+
+export const readPosts = async (
+  query: Request['query']
+): Promise<{
+  posts: Post[];
+  users: Omit<User, 'password'>[];
+  communities: Community[];
+}> => {
+  let { community } = query;
+
+  if (typeof community === 'string') {
+    community = [community];
+  }
+
+  const res = await db.transaction(async (trx) => {
+    let dbQuery = trx<Post>('posts')
+      .select('posts.*', 'communities.name as community')
+      .leftJoin<Community>(
+        'communities',
+        'communities.id',
+        'posts.community_id'
+      );
+
+    if (community) {
+      dbQuery = dbQuery.whereIn(
+        'communities.name',
+        community as readonly string[]
+      );
+    }
+
+    const posts = await dbQuery.orderBy('posts.created_at', 'desc');
+
+    const uniqueUserIds = [...new Set(posts.map((p) => p.author_id))];
+    const uniqueCommunityIds = [...new Set(posts.map((p) => p.community_id))];
+
+    const users = (
+      await trx<User>('users').select().whereIn('id', uniqueUserIds)
+    ).map(userSerializer);
+
+    const communities = await trx<Community>('communities')
+      .select()
+      .whereIn('id', uniqueCommunityIds);
+
+    return { posts, users, communities };
+  });
+
+  return res;
 };

@@ -31,7 +31,7 @@ export const App = () => {
           <Route exact path="/">
             <Home />
           </Route>
-          <Route exact path="/create">
+          <Route exact path="/create-post">
             <CreatePost />
           </Route>
         </Switch>

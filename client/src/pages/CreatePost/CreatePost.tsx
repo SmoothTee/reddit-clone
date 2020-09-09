@@ -10,11 +10,18 @@ import { readCommunitiesAction } from "../../redux/community/actions";
 import { useTypedSelector } from "../../redux/hooks";
 import { Button } from "../../components/Button";
 import { Input } from "../../components/Input";
+import { createPostAction } from "../../redux/post/actions";
+import { useHistory, useLocation } from "react-router-dom";
 
 type OptionType = { label: string; value: number };
 
 export const CreatePost = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
+
+  const location = useLocation();
+
+  const next = new URLSearchParams(location.search).get("next");
 
   const [selectedCommunity, setSelectedCommunity] = useState<OptionType | null>(
     null
@@ -43,13 +50,19 @@ export const CreatePost = () => {
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
 
-    // dispatch(
-    //   createPostAction({
-    //     community_id: (selectedCommunity as OptionType).value,
-    //     title,
-    //     body,
-    //   })
-    // );
+    dispatch(
+      createPostAction(
+        {
+          community_id: (selectedCommunity as OptionType).value,
+          title,
+          body,
+        },
+        () => {
+          console.log("PUSH");
+          history.push(next ? next : "/");
+        }
+      )
+    );
   };
 
   return (
