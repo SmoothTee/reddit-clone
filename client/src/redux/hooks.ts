@@ -2,14 +2,24 @@ import { useSelector, TypedUseSelectorHook } from "react-redux";
 import { ModalState } from "./modal/types";
 import { AuthState } from "./auth/types";
 import { CommunityState } from "./community/types";
-import { CommunityEntityState } from "./entities/types";
+import {
+  CommunityEntityState,
+  UserEntityState,
+  PostEntityState,
+  PostVoteEntityState,
+} from "./entities/types";
+import { HomePostsState } from "./post/types";
 
 interface RootState {
   modal: ModalState;
   auth: AuthState;
   community: CommunityState;
+  homePosts: HomePostsState;
   entities: {
+    users: UserEntityState;
     communities: CommunityEntityState;
+    posts: PostEntityState;
+    postVotes: PostVoteEntityState;
   };
   error: any;
 }

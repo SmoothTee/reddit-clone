@@ -8,7 +8,7 @@ import {
   READ_POSTS_SUCCESS,
   READ_POSTS_FAILURE,
 } from "./constants";
-import { Post } from "./types";
+import { Post, PostVote } from "./types";
 import { User } from "../auth/types";
 import { Community } from "../community/types";
 
@@ -34,11 +34,13 @@ const readPostsSuccess = (data: {
   posts: Post[];
   users: User[];
   communities: Community[];
+  postVotes: PostVote[];
 }) => ({
   type: READ_POSTS_SUCCESS,
   posts: data.posts,
   users: data.users,
   communities: data.communities,
+  postVotes: data.postVotes,
 });
 
 const readPostsFailure = (error: any) => ({

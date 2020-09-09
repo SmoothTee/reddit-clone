@@ -23,7 +23,10 @@ export const NavBar = () => {
         <li className={styles.list_item}>
           <Link
             to={`/create-post${
-              location.pathname.length > 1 ? `?next=${location.pathname}` : ""
+              location.pathname.length > 1 &&
+              location.pathname !== "/create-post"
+                ? `?next=${location.pathname}`
+                : ""
             }`}
             className={styles.icon_link}
           >
@@ -31,7 +34,7 @@ export const NavBar = () => {
           </Link>
         </li>
         <li className={styles.list_item}>
-          <Link to={`/user/${session!.username}`} className={styles.icon_link}>
+          <Link to={`/u/${session!.username}`} className={styles.icon_link}>
             <AiOutlineUser />
           </Link>
         </li>

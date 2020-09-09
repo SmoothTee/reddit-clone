@@ -1,4 +1,4 @@
-import { PostActionTypes } from "./types";
+import { PostActionTypes, HomePostsState } from "./types";
 import {
   READ_POSTS_REQUEST,
   READ_POSTS_SUCCESS,
@@ -12,7 +12,7 @@ export const postsByCommunity = (state: {}, action: PostActionTypes) => {
   }
 };
 
-const initialHomePostsState = {
+const initialHomePostsState: HomePostsState = {
   items: [],
   isFetching: false,
   cursor: null,

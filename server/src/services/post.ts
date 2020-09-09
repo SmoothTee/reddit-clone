@@ -112,11 +112,14 @@ export const readPosts = async (
   const res = await db.transaction(async (trx) => {
     let dbQuery = trx<Post>('posts')
       .select('posts.*', 'communities.name as community')
+      .count('comments.id as numOfComments')
       .leftJoin<Community>(
         'communities',
         'communities.id',
         'posts.community_id'
-      );
+      )
+      .leftJoin<Comment>('comments', 'comments.post_id', 'posts.id')
+      .groupBy('posts.id', 'communities.name');
 
     if (community) {
       dbQuery = dbQuery.whereIn(
@@ -126,6 +129,8 @@ export const readPosts = async (
     }
 
     const posts = await dbQuery.orderBy('posts.created_at', 'desc');
+
+    const postIds = posts.map((p) => p.id);
 
     const uniqueUserIds = [...new Set(posts.map((p) => p.author_id))];
     const uniqueCommunityIds = [...new Set(posts.map((p) => p.community_id))];
@@ -138,7 +143,11 @@ export const readPosts = async (
       .select()
       .whereIn('id', uniqueCommunityIds);
 
-    return { posts, users, communities };
+    const postVotes = await trx<PostVote>('post_votes')
+      .select()
+      .whereIn('post_id', postIds);
+
+    return { posts, users, communities, postVotes };
   });
 
   return res;

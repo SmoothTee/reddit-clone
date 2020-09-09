@@ -11,11 +11,27 @@ import { User } from "../auth/types";
 
 export interface Post {
   id: number;
+  author_id: number;
   community_id: number;
   title: string;
   body?: string;
+  numOfComments: number;
   created_at: string;
   updated_at: string;
+}
+
+export interface PostVote {
+  user_id: number;
+  post_id: number;
+  vote: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface HomePostsState {
+  items: number[];
+  isFetching: boolean;
+  cursor: string | null;
 }
 
 interface CreatePostRequestAction {
@@ -41,6 +57,7 @@ interface ReadPostsSuccessAction {
   posts: Post[];
   users: User[];
   communities: Community[];
+  postVotes: PostVote[];
 }
 
 interface ReadPostsFailureAction {
