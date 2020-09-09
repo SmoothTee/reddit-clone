@@ -9,4 +9,6 @@
   justify-content: space-between;
   padding: 0 2rem;
   border-bottom: 1px solid var(--grey);
+  background: var(--white);
+  z-index: 1;
 }

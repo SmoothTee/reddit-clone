@@ -23,7 +23,7 @@ const readCommunitiesSuccess = (communities: Community[]) => {
   return {
     type: READ_COMMUNITIES_SUCCESS,
     communitiesById,
-    communities: Object.keys(communitiesById),
+    communities: Object.keys(communitiesById).map(Number),
   };
 };
 

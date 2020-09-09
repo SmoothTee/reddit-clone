@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from "react";
+import React, { forwardRef, useState, ChangeEvent } from "react";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 
 import styles from "./Input.module.css";
@@ -8,10 +8,12 @@ interface InputProps {
   label: string;
   type?: string;
   error?: string;
+  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  value?: string;
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ name, type, label, error }, ref) => {
+  ({ name, type, label, error, onChange, value }, ref) => {
     const [showPassword, setShowPassword] = useState(false);
 
     return (
@@ -25,6 +27,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           placeholder=" "
           autoComplete="off"
+          onChange={onChange}
+          value={value}
         />
         <label htmlFor={name} className={styles.label}>
           {label}

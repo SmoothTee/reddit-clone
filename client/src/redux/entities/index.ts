@@ -5,14 +5,17 @@ import {
   CommunityActionTypes,
   ReadCommunitiesSuccessAction,
 } from "../community/types";
+import { CommunityEntityState } from "./types";
 
-const initialState = {
+const communityInitialState: CommunityEntityState = {
   byId: {},
 };
 
-const communities = (state = initialState, action: CommunityActionTypes) => {
+const communities = (
+  state = communityInitialState,
+  action: CommunityActionTypes
+) => {
   switch (action.type) {
-    default:
     case READ_COMMUNITIES_SUCCESS:
       return {
         byId: Object.assign(
@@ -21,6 +24,7 @@ const communities = (state = initialState, action: CommunityActionTypes) => {
           (action as ReadCommunitiesSuccessAction).communitiesById
         ),
       };
+    default:
       return state;
   }
 };
