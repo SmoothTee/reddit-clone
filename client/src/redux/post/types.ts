@@ -8,9 +8,13 @@ import {
   VOTE_POST_REQUEST,
   VOTE_POST_SUCCESS,
   VOTE_POST_FAILURE,
+  READ_POST_REQUEST,
+  READ_POST_SUCCESS,
+  READ_POST_FAILURE,
 } from "./constants";
 import { Community } from "../community/types";
 import { User } from "../auth/types";
+import { PostComment } from "../comment/types";
 
 export interface Post {
   id: number;
@@ -35,6 +39,11 @@ export interface HomePostsState {
   items: number[];
   isFetching: boolean;
   cursor: string | null;
+}
+
+export interface PostDiscussionState {
+  item: number | null;
+  isFetching: boolean;
 }
 
 interface CreatePostRequestAction {
@@ -68,6 +77,24 @@ interface ReadPostsFailureAction {
   error: any;
 }
 
+interface ReadPostRequestAction {
+  type: typeof READ_POST_REQUEST;
+}
+
+interface ReadPostSuccessAction {
+  type: typeof READ_POST_SUCCESS;
+  post: Post;
+  user: User;
+  community: Community;
+  comments: PostComment[];
+  postVotes: PostVote[];
+}
+
+interface ReadPostFailureAction {
+  type: typeof READ_POST_FAILURE;
+  error: any;
+}
+
 interface VotePostRequestAction {
   type: typeof VOTE_POST_REQUEST;
 }
@@ -90,6 +117,9 @@ export type PostActionTypes =
   | ReadPostsRequestAction
   | ReadPostsSuccessAction
   | ReadPostsFailureAction
+  | ReadPostRequestAction
+  | ReadPostSuccessAction
+  | ReadPostFailureAction
   | VotePostRequestAction
   | VotePostSuccessAction
   | VotePostFailureAction;

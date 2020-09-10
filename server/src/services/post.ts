@@ -2,7 +2,7 @@ import { Request } from 'express';
 
 import { db } from '../database';
 import { AppError } from '../utils/appError';
-import { User } from './auth';
+import { User, UserWithoutPassword } from './auth';
 import { Community } from './community';
 import { userSerializer } from '../utils/serializer';
 import { CommunityMember } from './community';
@@ -163,4 +163,59 @@ export const readPosts = async (
   });
 
   return res;
+};
+
+export const readPost = async (
+  postId: number,
+  communityName: string,
+  postTitle: string
+): Promise<{ post: Post; user: UserWithoutPassword; community: Community }> => {
+  const data = await db.transaction(async (trx) => {
+    const post = await trx('posts')
+      .first('posts.*', 'communities.name as community')
+      .where({ 'posts.id': postId, 'communities.name': communityName })
+      .andWhere('title', 'like', `${postTitle}%`)
+      .leftJoin('communities', 'communities.id', 'posts.community_id');
+
+    const user = await trx('users').first().where('id', post.author_id);
+    const community = await trx('communities')
+      .first()
+      .where('id', post.community_id);
+
+    const comments = await trx
+      .withRecursive('cte', (qb) => {
+        qb.select(
+          'comments.id',
+          'comments.parent_id',
+          'comments.author_id',
+          'comments.body',
+          trx.raw('array[id] as path'),
+          trx.raw('1 as depth')
+        )
+          .from('comments')
+          .where('parent_id', null)
+          .union((qb) => {
+            qb.select(
+              'c.id',
+              'c.parent_id',
+              'c.author_id',
+              'c.body',
+              trx.raw('cte.path || c.id'),
+              trx.raw('cte.depth + 1 as depth')
+            )
+              .from('comments as c')
+              .join('cte', 'cte.id', 'c.parent_id');
+          });
+      })
+      .select('*')
+      .from('cte')
+      .orderBy('path');
+
+    const postVotes = await trx<PostVote>('post_votes')
+      .select()
+      .where('post_id', post.id);
+
+    return { post, user: userSerializer(user), community, comments, postVotes };
+  });
+  return data;
 };

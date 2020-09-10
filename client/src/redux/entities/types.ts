@@ -1,6 +1,7 @@
 import { User } from "../auth/types";
 import { Community } from "../community/types";
 import { Post, PostVote } from "../post/types";
+import { PostComment } from "../comment/types";
 
 export interface UserEntityState {
   byId: {
@@ -25,5 +26,11 @@ export interface PostVoteEntityState {
     [key: number]: {
       [key: number]: PostVote;
     };
+  };
+}
+
+export interface CommentEntityState {
+  byId: {
+    [key: number]: PostComment;
   };
 }

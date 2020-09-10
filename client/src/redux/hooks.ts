@@ -7,8 +7,10 @@ import {
   UserEntityState,
   PostEntityState,
   PostVoteEntityState,
+  CommentEntityState,
 } from "./entities/types";
-import { HomePostsState } from "./post/types";
+import { HomePostsState, PostDiscussionState } from "./post/types";
+import { CommentsByPostState } from "./comment/types";
 
 interface RootState {
   modal: ModalState;
@@ -21,7 +23,10 @@ interface RootState {
     communities: CommunityEntityState;
     posts: PostEntityState;
     postVotes: PostVoteEntityState;
+    comments: CommentEntityState;
   };
+  postDiscussion: PostDiscussionState;
+  commentsByPost: CommentsByPostState;
   error: any;
 }
 

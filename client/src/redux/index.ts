@@ -8,7 +8,8 @@ import { community, memberCommunity } from "./community";
 import { entities } from "./entities";
 import { AppReducerParameters } from "./types";
 import { LOGOUT_SUCCESS } from "./auth/constants";
-import { homePosts } from "./post";
+import { homePosts, postDiscussion } from "./post";
+import { commentsByPost } from "./comment";
 
 export const appReducer = combineReducers({
   auth,
@@ -17,6 +18,8 @@ export const appReducer = combineReducers({
   community,
   memberCommunity,
   homePosts,
+  postDiscussion,
+  commentsByPost,
   entities,
 });
 

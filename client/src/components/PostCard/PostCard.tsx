@@ -4,7 +4,7 @@ import { ImArrowUp, ImArrowDown } from "react-icons/im";
 import { useDispatch } from "react-redux";
 
 import styles from "./PostCard.module.css";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { MdChatBubble } from "react-icons/md";
 import { PostVote } from "../../redux/post/types";
 import { votePostAction } from "../../redux/post/actions";
@@ -33,16 +33,25 @@ export const PostCard = ({
   postVote,
 }: PostCardProps) => {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const vote = postVote ? postVote.vote : undefined;
 
   return (
-    <div className={styles.container}>
+    <div
+      className={styles.container}
+      onClick={() =>
+        history.push(`/r/${community}/comments/${id}/${title.slice(0, 50)}`)
+      }
+    >
       <div className={styles.sidebar}>
         <div className={styles.votes}>
           <button
             className={`${styles.vote_button} ${vote === 1 ? styles.red : ""}`}
-            onClick={() => dispatch(votePostAction({ post_id: id, vote: 1 }))}
+            onClick={(event) => {
+              event.stopPropagation();
+              dispatch(votePostAction({ post_id: id, vote: 1 }));
+            }}
           >
             <ImArrowUp />
           </button>
@@ -57,7 +66,10 @@ export const PostCard = ({
             className={`${styles.vote_button} ${
               vote === -1 ? styles.blue : ""
             }`}
-            onClick={() => dispatch(votePostAction({ post_id: id, vote: -1 }))}
+            onClick={(event) => {
+              event.stopPropagation();
+              dispatch(votePostAction({ post_id: id, vote: -1 }));
+            }}
           >
             <ImArrowDown />
           </button>
@@ -65,12 +77,20 @@ export const PostCard = ({
       </div>
       <div className={styles.main}>
         <div className={styles.header}>
-          <Link to={`/r/${community}`} className={styles.community}>
+          <Link
+            to={`/r/${community}`}
+            onClick={(event) => event.stopPropagation()}
+            className={styles.community}
+          >
             /r/{community}
           </Link>
           <span className={styles.author}>
             Posted by{" "}
-            <Link to={`/u/${username}`} className={styles.author_link}>
+            <Link
+              to={`/u/${username}`}
+              onClick={(event) => event.stopPropagation()}
+              className={styles.author_link}
+            >
               /u/{username}
             </Link>
           </span>

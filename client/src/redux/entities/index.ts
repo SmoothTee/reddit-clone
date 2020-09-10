@@ -7,15 +7,18 @@ import {
   PostEntityState,
   UserEntityState,
   PostVoteEntityState,
+  CommentEntityState,
 } from "./types";
 import {
   CREATE_POST_SUCCESS,
   READ_POSTS_SUCCESS,
   VOTE_POST_SUCCESS,
+  READ_POST_SUCCESS,
 } from "../post/constants";
 import { PostActionTypes, Post, PostVote } from "../post/types";
 import { ActionTypes } from "../types";
 import { User } from "../auth/types";
+import { PostComment } from "../comment/types";
 
 const userInitialState: UserEntityState = {
   byId: {},
@@ -31,6 +34,13 @@ const users = (state = userInitialState, action: ActionTypes) => {
             acc[curr.id] = curr;
             return acc;
           }, {}),
+        },
+      };
+    case READ_POST_SUCCESS:
+      return {
+        byId: {
+          ...state.byId,
+          [action.user.id]: action.user,
         },
       };
     default:
@@ -61,6 +71,13 @@ const communities = (state = communityInitialState, action: ActionTypes) => {
           ),
         },
       };
+    case READ_POST_SUCCESS:
+      return {
+        byId: {
+          ...state.byId,
+          [action.community.id]: action.community,
+        },
+      };
     default:
       return state;
   }
@@ -84,6 +101,13 @@ const posts = (state = postInitialState, action: PostActionTypes) => {
           acc[curr.id] = curr;
           return acc;
         }, {}),
+      };
+    case READ_POST_SUCCESS:
+      return {
+        byId: {
+          ...state.byId,
+          [action.post.id]: action.post,
+        },
       };
     default:
       return state;
@@ -146,6 +170,43 @@ const postVotes = (state = postVotesInitialState, action: PostActionTypes) => {
         };
       }
       break;
+    case READ_POST_SUCCESS:
+      return {
+        byPostId: {
+          ...state.byPostId,
+          [action.post.id]: action.postVotes.reduce(
+            (acc: { [key: number]: PostVote }, curr) => {
+              acc[curr.user_id] = curr;
+              return acc;
+            },
+            {}
+          ),
+        },
+      };
+    default:
+      return state;
+  }
+};
+
+const commentsInitialState: CommentEntityState = {
+  byId: {},
+};
+
+const comments = (state = commentsInitialState, action: ActionTypes) => {
+  switch (action.type) {
+    case READ_POST_SUCCESS:
+      return {
+        byId: {
+          ...state.byId,
+          ...action.comments.reduce(
+            (acc: { [key: number]: PostComment }, curr) => {
+              acc[curr.id] = curr;
+              return acc;
+            },
+            {}
+          ),
+        },
+      };
     default:
       return state;
   }
@@ -156,4 +217,5 @@ export const entities = combineReducers({
   communities,
   posts,
   postVotes,
+  comments,
 });

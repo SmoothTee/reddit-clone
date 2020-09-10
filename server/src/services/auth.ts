@@ -13,7 +13,7 @@ export interface User {
   updated_at: string;
 }
 
-type UserWithoutPassword = Omit<User, 'password'>;
+export type UserWithoutPassword = Omit<User, 'password'>;
 
 export const register = async (
   data: Omit<User, 'id' | 'created_at' | 'updated_at'> & {

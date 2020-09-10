@@ -21,3 +21,16 @@ export const readPosts = catchError(async (req, res) => {
 
   res.json({ data });
 });
+
+export const readPost = catchError(async (req, res) => {
+  const { post_id } = req.params;
+  const { community, post_title } = req.query;
+
+  const data = await postService.readPost(
+    Number(post_id),
+    community as string,
+    post_title as string
+  );
+
+  res.json({ data });
+});

@@ -10,10 +10,14 @@ import {
   VOTE_POST_REQUEST,
   VOTE_POST_SUCCESS,
   VOTE_POST_FAILURE,
+  READ_POST_REQUEST,
+  READ_POST_SUCCESS,
+  READ_POST_FAILURE,
 } from "./constants";
 import { Post, PostVote, PostActionTypes } from "./types";
 import { User } from "../auth/types";
 import { Community } from "../community/types";
+import { PostComment } from "../comment/types";
 
 const createPostRequest = (): PostActionTypes => ({
   type: CREATE_POST_REQUEST,
@@ -66,6 +70,30 @@ const votePostSuccess = (data: {
 
 const votePostFailure = (error: any): PostActionTypes => ({
   type: VOTE_POST_FAILURE,
+  error,
+});
+
+const readPostRequest = () => ({
+  type: READ_POST_REQUEST,
+});
+
+const readPostSuccess = (data: {
+  post: Post;
+  community: Community;
+  user: User;
+  comments: PostComment[];
+  postVotes: PostVote[];
+}) => ({
+  type: READ_POST_SUCCESS,
+  post: data.post,
+  community: data.community,
+  user: data.user,
+  comments: data.comments,
+  postVotes: data.postVotes,
+});
+
+const readPostFailure = (error: any) => ({
+  type: READ_POST_FAILURE,
   error,
 });
 
@@ -132,5 +160,25 @@ export const votePostAction = (body: {
     }
   } catch (err) {
     dispatch(votePostFailure(`Failed to vote post: ${err}`));
+  }
+};
+
+export const readPostAction = (
+  postId: number,
+  community: string,
+  postTitle: string
+): AppThunk => async (dispatch) => {
+  try {
+    dispatch(readPostRequest());
+    const { success, res } = await clientFetch(
+      `/api/post/${postId}?community=${community}&post_title=${postTitle}`
+    );
+    if (success) {
+      dispatch(readPostSuccess(res.data));
+    } else {
+      dispatch(readPostFailure(res));
+    }
+  } catch (err) {
+    dispatch(readPostFailure(`Failed to read post: ${err}`));
   }
 };

@@ -9,6 +9,7 @@ import { meAction } from "../../redux/auth/actions";
 import { useTypedSelector } from "../../redux/hooks";
 import { Loading } from "../Loading";
 import { CreatePost } from "../../pages/CreatePost";
+import { PostDiscussion } from "../../pages/PostDiscussion";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -33,6 +34,9 @@ export const App = () => {
           </Route>
           <Route exact path="/create-post">
             <CreatePost />
+          </Route>
+          <Route exact path="/r/:community_name/comments/:post_id/:post_title">
+            <PostDiscussion />
           </Route>
         </Switch>
       </Layout>

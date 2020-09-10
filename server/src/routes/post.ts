@@ -20,5 +20,6 @@ router.post(
   validate(validateSchemas.votePost, 'body'),
   postController.votePost
 );
+router.route('/:post_id').get(postController.readPost);
 
 export const post = router;
