@@ -28,9 +28,15 @@ body {
   --dark-grey: rgb(128, 128, 128);
   --yellow: rgb(253, 229, 78);
   --red: rgb(255, 113, 113);
+  --blue: rgb(140, 208, 239);
 }
 
-/* Set max height of quill editor */
+/* Quill */
+.quill {
+  display: flex;
+  flex-direction: column;
+}
+
 .ql-editor {
   max-height: calc(100vh - var(--header-height) - 42px);
 }

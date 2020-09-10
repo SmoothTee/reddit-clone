@@ -8,7 +8,11 @@ import {
   UserEntityState,
   PostVoteEntityState,
 } from "./types";
-import { CREATE_POST_SUCCESS, READ_POSTS_SUCCESS } from "../post/constants";
+import {
+  CREATE_POST_SUCCESS,
+  READ_POSTS_SUCCESS,
+  VOTE_POST_SUCCESS,
+} from "../post/constants";
 import { PostActionTypes, Post, PostVote } from "../post/types";
 import { ActionTypes } from "../types";
 import { User } from "../auth/types";
@@ -94,6 +98,7 @@ const postVotes = (state = postVotesInitialState, action: PostActionTypes) => {
   switch (action.type) {
     case READ_POSTS_SUCCESS:
       return {
+        ...state,
         byPostId: {
           ...state.byPostId,
           ...action.postVotes.reduce(
@@ -112,6 +117,35 @@ const postVotes = (state = postVotesInitialState, action: PostActionTypes) => {
           ),
         },
       };
+    case VOTE_POST_SUCCESS:
+      const { postVote, voteAction } = action;
+      if (voteAction === "c" || voteAction === "u") {
+        const updated = state.byPostId[postVote.post_id]
+          ? {
+              ...state.byPostId[postVote.post_id],
+              [postVote.user_id]: postVote,
+            }
+          : { [postVote.user_id]: postVote };
+
+        return {
+          byPostId: {
+            ...state.byPostId,
+            [postVote.post_id]: updated,
+          },
+        };
+      }
+      if (voteAction === "d") {
+        const { [postVote.user_id]: omit, ...rest } = state.byPostId[
+          postVote.post_id
+        ];
+        return {
+          byPostId: {
+            ...state.byPostId,
+            [postVote.post_id]: rest,
+          },
+        };
+      }
+      break;
     default:
       return state;
   }

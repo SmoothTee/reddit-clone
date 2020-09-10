@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.posts {
+  max-width: 40rem;
+  width: 100%;
+}
+
+.posts > *:not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+.sidebar {
+  margin-left: 1rem;
+}
+
+.box {
+  border: 1px solid var(--grey);
+  border-radius: 3px;
+  padding: 1rem;
+}
+
+.box_header {
+  font-weight: 700;
+}

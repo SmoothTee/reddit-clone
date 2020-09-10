@@ -1,39 +1,64 @@
 import React from "react";
 import moment from "moment";
 import { ImArrowUp, ImArrowDown } from "react-icons/im";
+import { useDispatch } from "react-redux";
 
 import styles from "./PostCard.module.css";
 import { Link } from "react-router-dom";
 import { MdChatBubble } from "react-icons/md";
+import { PostVote } from "../../redux/post/types";
+import { votePostAction } from "../../redux/post/actions";
 
 interface PostCardProps {
-  numOfVotes: number;
+  id: number;
+  sumOfVotes: number;
   community: string;
   username: string;
   createdAt: string;
   title: string;
   numOfComments: number;
   body?: string;
+  postVote?: PostVote;
 }
 
 export const PostCard = ({
-  numOfVotes,
+  id,
+  sumOfVotes,
   community,
   username,
   createdAt,
   title,
   body,
   numOfComments,
+  postVote,
 }: PostCardProps) => {
+  const dispatch = useDispatch();
+
+  const vote = postVote ? postVote.vote : undefined;
+
   return (
     <div className={styles.container}>
       <div className={styles.sidebar}>
         <div className={styles.votes}>
-          <button className={styles.vote_button}>
+          <button
+            className={`${styles.vote_button} ${vote === 1 ? styles.red : ""}`}
+            onClick={() => dispatch(votePostAction({ post_id: id, vote: 1 }))}
+          >
             <ImArrowUp />
           </button>
-          <span className={styles.sum_votes}>{numOfVotes}</span>
-          <button className={styles.vote_button}>
+          <span
+            className={`${styles.sum_votes} ${
+              vote === 1 ? styles.red : vote === -1 ? styles.blue : ""
+            }`}
+          >
+            {sumOfVotes}
+          </span>
+          <button
+            className={`${styles.vote_button} ${
+              vote === -1 ? styles.blue : ""
+            }`}
+            onClick={() => dispatch(votePostAction({ post_id: id, vote: -1 }))}
+          >
             <ImArrowDown />
           </button>
         </div>

@@ -5,6 +5,9 @@ import {
   READ_POSTS_REQUEST,
   READ_POSTS_SUCCESS,
   READ_POSTS_FAILURE,
+  VOTE_POST_REQUEST,
+  VOTE_POST_SUCCESS,
+  VOTE_POST_FAILURE,
 } from "./constants";
 import { Community } from "../community/types";
 import { User } from "../auth/types";
@@ -65,10 +68,28 @@ interface ReadPostsFailureAction {
   error: any;
 }
 
+interface VotePostRequestAction {
+  type: typeof VOTE_POST_REQUEST;
+}
+
+interface VotePostSuccessAction {
+  type: typeof VOTE_POST_SUCCESS;
+  postVote: PostVote;
+  voteAction: string;
+}
+
+interface VotePostFailureAction {
+  type: typeof VOTE_POST_FAILURE;
+  error: any;
+}
+
 export type PostActionTypes =
   | CreatePostRequestAction
   | CreatePostSuccessAction
   | CreatePostFailureAction
   | ReadPostsRequestAction
   | ReadPostsSuccessAction
-  | ReadPostsFailureAction;
+  | ReadPostsFailureAction
+  | VotePostRequestAction
+  | VotePostSuccessAction
+  | VotePostFailureAction;

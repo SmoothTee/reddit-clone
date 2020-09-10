@@ -111,8 +111,11 @@ export const readPosts = async (
 
   const res = await db.transaction(async (trx) => {
     let dbQuery = trx<Post>('posts')
-      .select('posts.*', 'communities.name as community')
-      .count('comments.id as numOfComments')
+      .select(
+        'posts.*',
+        'communities.name as community',
+        trx.raw('count(comments.id)::integer as "numOfComments"')
+      )
       .leftJoin<Community>(
         'communities',
         'communities.id',
@@ -131,7 +134,6 @@ export const readPosts = async (
     const posts = await dbQuery.orderBy('posts.created_at', 'desc');
 
     const postIds = posts.map((p) => p.id);
-
     const uniqueUserIds = [...new Set(posts.map((p) => p.author_id))];
     const uniqueCommunityIds = [...new Set(posts.map((p) => p.community_id))];
 
