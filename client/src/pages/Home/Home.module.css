@@ -15,12 +15,22 @@
 
 .sidebar {
   margin-left: 1rem;
+  max-width: 15rem;
+  width: 100%;
 }
 
 .box {
+  position: sticky;
+  top: calc(var(--header-height) + 1rem);
+  display: flex;
+  flex-direction: column;
   border: 1px solid var(--grey);
   border-radius: 3px;
   padding: 1rem;
+}
+
+.box > *:not(:last-child) {
+  margin-bottom: 1rem;
 }
 
 .box_header {

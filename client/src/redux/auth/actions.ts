@@ -36,7 +36,10 @@ const loginRequest = (): AuthActionTypes => ({
   type: LOGIN_REQUEST,
 });
 
-const loginSuccess = (payload: User): AuthActionTypes => ({
+const loginSuccess = (payload: {
+  user: User;
+  memberCommunity: number[];
+}): AuthActionTypes => ({
   type: LOGIN_SUCCESS,
   payload,
 });
@@ -63,7 +66,10 @@ const meRequest = (): AuthActionTypes => ({
   type: ME_REQUEST,
 });
 
-const meSuccess = (payload: User): AuthActionTypes => ({
+const meSuccess = (payload: {
+  user: User;
+  memberCommunity: number[];
+}): AuthActionTypes => ({
   type: ME_SUCCESS,
   payload,
 });
@@ -100,7 +106,7 @@ export const loginAction = <T>(body: T): AppThunk => async (dispatch) => {
     if (success) {
       dispatch(resetError());
       dispatch(hideModal());
-      dispatch(loginSuccess(res.user));
+      dispatch(loginSuccess(res));
     } else {
       dispatch(loginFailure(res));
     }
@@ -128,7 +134,7 @@ export const meAction = (): AppThunk => async (dispatch) => {
     dispatch(meRequest());
     const { success, res } = await clientFetch("/api/auth/me");
     if (success) {
-      dispatch(meSuccess(res.user));
+      dispatch(meSuccess(res));
     } else {
       dispatch(meFailure(res));
     }

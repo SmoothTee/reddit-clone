@@ -19,8 +19,8 @@ export const becomeMember = catchError(async (req, res) => {
   res.json({ communityMember });
 });
 
-export const readCommunities = catchError(async (_req, res) => {
-  const communities = await communityService.readCommunities();
+export const readCommunities = catchError(async (req, res) => {
+  const communities = await communityService.readCommunities(req);
 
   res.json({ communities });
 });

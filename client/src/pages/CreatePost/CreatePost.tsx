@@ -3,6 +3,7 @@ import "react-quill/dist/quill.snow.css";
 import React, { useEffect, useState, FormEvent } from "react";
 import Select, { ValueType } from "react-select";
 import ReactQuill from "react-quill";
+import DOMPurify from "dompurify";
 import { useDispatch } from "react-redux";
 
 import styles from "./CreatePost.module.css";
@@ -55,10 +56,9 @@ export const CreatePost = () => {
         {
           community_id: (selectedCommunity as OptionType).value,
           title,
-          body,
+          body: DOMPurify.sanitize(body),
         },
         () => {
-          console.log("PUSH");
           history.push(next ? next : "/");
         }
       )

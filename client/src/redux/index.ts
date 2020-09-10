@@ -4,7 +4,7 @@ import { createStore, applyMiddleware, compose, combineReducers } from "redux";
 import { auth } from "./auth";
 import { modal } from "./modal";
 import { error } from "./error";
-import { community } from "./community";
+import { community, memberCommunity } from "./community";
 import { entities } from "./entities";
 import { AppReducerParameters } from "./types";
 import { LOGOUT_SUCCESS } from "./auth/constants";
@@ -15,6 +15,7 @@ export const appReducer = combineReducers({
   modal,
   error,
   community,
+  memberCommunity,
   homePosts,
   entities,
 });

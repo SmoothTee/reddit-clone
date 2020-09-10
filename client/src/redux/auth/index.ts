@@ -28,17 +28,23 @@ export const auth = (state = initialState, action: AuthActionTypes) => {
         isFetching: true,
       };
     case REGISTER_SUCCESS:
-    case LOGIN_SUCCESS:
       return {
         ...state,
         session: action.payload,
         isAuthenticated: true,
         isFetching: false,
       };
+    case LOGIN_SUCCESS:
+      return {
+        ...state,
+        session: action.payload.user,
+        isAuthenticated: true,
+        isFetching: false,
+      };
     case ME_SUCCESS:
       return {
         ...state,
-        session: action.payload,
+        session: action.payload.user,
         isAuthenticated: true,
         isFetching: false,
         didRequest: true,

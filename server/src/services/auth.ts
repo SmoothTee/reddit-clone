@@ -59,7 +59,7 @@ export const register = async (
 
 export const login = async (
   data: Pick<User, 'username' | 'password'>
-): Promise<UserWithoutPassword> => {
+): Promise<{ user: UserWithoutPassword; memberCommunity: number[] }> => {
   const { username, password } = data;
   const user = await db('users').first().where({ username });
   if (!user) {
@@ -73,13 +73,25 @@ export const login = async (
       password: 'Password is invalid',
     });
   }
-  return userSerializer(user);
+  const memberCommunity = (
+    await db('community_members')
+      .select('community_id')
+      .where({ user_id: user.id })
+  ).map((c) => c.community_id);
+  return { user: userSerializer(user), memberCommunity };
 };
 
-export const me = async (userId: number): Promise<UserWithoutPassword> => {
+export const me = async (
+  userId: number
+): Promise<{ user: UserWithoutPassword; memberCommunity: number[] }> => {
   const user = await db('users').first().where({ id: userId });
   if (!user) {
     throw new AppError(404, 'Invalid session.');
   }
-  return userSerializer(user);
+  const memberCommunity = (
+    await db('community_members')
+      .select('community_id')
+      .where({ user_id: user.id })
+  ).map((c) => c.community_id);
+  return { user: userSerializer(user), memberCommunity };
 };

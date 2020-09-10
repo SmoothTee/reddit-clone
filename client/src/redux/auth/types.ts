@@ -49,7 +49,7 @@ interface LoginRequestAction {
 
 interface LoginSuccessAction {
   type: typeof LOGIN_SUCCESS;
-  payload: User;
+  payload: { user: User; memberCommunity: number[] };
 }
 
 interface LoginFailureAction {
@@ -76,7 +76,7 @@ interface MeRequestAction {
 
 interface MeSuccessAction {
   type: typeof ME_SUCCESS;
-  payload: User;
+  payload: { user: User; memberCommunity: number[] };
 }
 
 interface MeFailureAction {

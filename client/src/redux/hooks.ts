@@ -1,7 +1,7 @@
 import { useSelector, TypedUseSelectorHook } from "react-redux";
 import { ModalState } from "./modal/types";
 import { AuthState } from "./auth/types";
-import { CommunityState } from "./community/types";
+import { CommunityState, MemberCommunityState } from "./community/types";
 import {
   CommunityEntityState,
   UserEntityState,
@@ -14,6 +14,7 @@ interface RootState {
   modal: ModalState;
   auth: AuthState;
   community: CommunityState;
+  memberCommunity: MemberCommunityState;
   homePosts: HomePostsState;
   entities: {
     users: UserEntityState;

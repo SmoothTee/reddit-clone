@@ -80,7 +80,10 @@ export const PostCard = ({
         </div>
         <div className={styles.center}>
           <span className={styles.title}>{title}</span>
-          <span className={styles.body}>{body}</span>
+          <span
+            className={styles.body}
+            dangerouslySetInnerHTML={{ __html: body ? body : "" }}
+          />
         </div>
         <div className={styles.footer}>
           <button className={styles.footer_button}>

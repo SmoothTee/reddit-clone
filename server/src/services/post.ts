@@ -5,6 +5,7 @@ import { AppError } from '../utils/appError';
 import { User } from './auth';
 import { Community } from './community';
 import { userSerializer } from '../utils/serializer';
+import { CommunityMember } from './community';
 
 interface Post {
   id: number;
@@ -142,8 +143,17 @@ export const readPosts = async (
     ).map(userSerializer);
 
     const communities = await trx<Community>('communities')
-      .select()
-      .whereIn('id', uniqueCommunityIds);
+      .select(
+        'communities.*',
+        trx.raw('count(community_members.user_id)::integer as "numOfMembers"')
+      )
+      .whereIn('id', uniqueCommunityIds)
+      .leftJoin<CommunityMember>(
+        'community_members',
+        'community_members.community_id',
+        'communities.id'
+      )
+      .groupBy('communities.id');
 
     const postVotes = await trx<PostVote>('post_votes')
       .select()

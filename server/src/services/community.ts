@@ -1,3 +1,5 @@
+import { Request } from 'express';
+
 import { db } from '../database';
 import { AppError, DuplicationError } from '../utils/appError';
 
@@ -9,7 +11,7 @@ export interface Community {
   updated_at: string;
 }
 
-interface CommunityMember {
+export interface CommunityMember {
   user_id: number;
   community_id: number;
   created_at: string;
@@ -65,16 +67,31 @@ export const becomeMember = async (
   }
 };
 
-export const readCommunities = async (): Promise<Community[]> => {
-  const communities = await db<Community>('communities')
-    .select('communities.*')
-    .count('community_members.user_id as numOfMembers')
+export const readCommunities = async (req: Request): Promise<Community[]> => {
+  const { query, session } = req;
+
+  let dbQuery = db<Community>('communities')
+    .select(
+      'communities.*',
+      db.raw('count(community_members.user_id)::integer as "numOfMembers"')
+    )
     .leftJoin<CommunityMember>(
       'community_members',
       'community_members.community_id',
       'communities.id'
     )
     .groupBy('communities.id');
+
+  if (query.not_member && session.userId) {
+    dbQuery = dbQuery.whereNotIn(
+      'id',
+      db('community_members')
+        .select('community_id')
+        .where({ user_id: session.userId })
+    );
+  }
+
+  const communities = await dbQuery;
 
   return communities;
 };
