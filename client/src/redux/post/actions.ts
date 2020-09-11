@@ -37,17 +37,21 @@ const readPostsRequest = (): PostActionTypes => ({
   type: READ_POSTS_REQUEST,
 });
 
-const readPostsSuccess = (data: {
-  posts: Post[];
-  users: User[];
-  communities: Community[];
-  postVotes: PostVote[];
-}): PostActionTypes => ({
+const readPostsSuccess = (
+  data: {
+    posts: Post[];
+    users: User[];
+    communities: Community[];
+    postVotes: PostVote[];
+  },
+  community?: string
+): PostActionTypes => ({
   type: READ_POSTS_SUCCESS,
   posts: data.posts,
   users: data.users,
   communities: data.communities,
   postVotes: data.postVotes,
+  community,
 });
 
 const readPostsFailure = (error: any): PostActionTypes => ({
@@ -118,7 +122,7 @@ export const createPostAction = <T>(
 };
 
 export const readPostsAction = (
-  communities: string[] = [],
+  communities: string | string[] = [],
   cursor?: string
 ): AppThunk => async (dispatch) => {
   try {
@@ -128,18 +132,26 @@ export const readPostsAction = (
     if (communities.length > 0 || cursor) {
       endpoint += "?";
     }
-    communities.forEach((c, index) => {
-      endpoint += `community=${c}${
-        index === communities.length - 1 ? "" : "&"
-      }`;
-    });
+    if (Array.isArray(communities)) {
+      communities.forEach((c, index) => {
+        endpoint += `community=${c}${
+          index === communities.length - 1 ? "" : "&"
+        }`;
+      });
+    } else {
+      endpoint += `community=${communities}`;
+    }
     if (cursor) {
       endpoint += `&cursor=${cursor}`;
     }
 
     const { success, res } = await clientFetch(endpoint);
     if (success) {
-      dispatch(readPostsSuccess(res.data));
+      if (typeof communities === "string") {
+        dispatch(readPostsSuccess(res.data, communities));
+      } else {
+        dispatch(readPostsSuccess(res.data));
+      }
     } else {
       dispatch(readPostsFailure(res));
     }

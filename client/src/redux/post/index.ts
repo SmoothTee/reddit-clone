@@ -1,4 +1,9 @@
-import { PostActionTypes, HomePostsState, PostDiscussionState } from "./types";
+import {
+  PostActionTypes,
+  HomePostsState,
+  PostDiscussionState,
+  CommunityPostsState,
+} from "./types";
 import {
   READ_POSTS_REQUEST,
   READ_POSTS_SUCCESS,
@@ -8,8 +13,38 @@ import {
   READ_POST_FAILURE,
 } from "./constants";
 
-export const postsByCommunity = (state: {}, action: PostActionTypes) => {
+const initialPostsState: CommunityPostsState = {
+  items: [],
+  isFetching: false,
+  cursor: null,
+};
+
+const posts = (state = initialPostsState, action: PostActionTypes) => {
   switch (action.type) {
+    case READ_POSTS_SUCCESS:
+      return {
+        ...state,
+        isFetching: false,
+        items: action.posts.map((p) => p.id),
+      };
+    default:
+      return state;
+  }
+};
+
+export const postsByCommunity = (
+  state: { [key: string]: CommunityPostsState } = {},
+  action: PostActionTypes
+) => {
+  switch (action.type) {
+    case READ_POSTS_SUCCESS:
+      if (!action.community) {
+        return state;
+      }
+      return {
+        ...state,
+        [action.community]: posts(state[action.community], action),
+      };
     default:
       return state;
   }

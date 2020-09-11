@@ -16,11 +16,19 @@ export const CommentEditor = ({ postId, parentId, cb }: CommentEditorProps) => {
   const dispatch = useDispatch();
   const [body, setBody] = useState("");
 
+  const callback = () => {
+    cb();
+    setBody("");
+  };
+
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
 
     dispatch(
-      createCommentAction({ parent_id: parentId, post_id: postId, body }, cb)
+      createCommentAction(
+        { parent_id: parentId, post_id: postId, body },
+        callback
+      )
     );
   };
 

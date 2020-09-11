@@ -10,6 +10,7 @@ import { useTypedSelector } from "../../redux/hooks";
 import { Loading } from "../Loading";
 import { CreatePost } from "../../pages/CreatePost";
 import { PostDiscussion } from "../../pages/PostDiscussion";
+import { Community } from "../../pages/Community";
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -37,6 +38,9 @@ export const App = () => {
           </Route>
           <Route exact path="/r/:community_name/comments/:post_id/:post_title">
             <PostDiscussion />
+          </Route>
+          <Route exact path="/r/:community_name">
+            <Community />
           </Route>
         </Switch>
       </Layout>

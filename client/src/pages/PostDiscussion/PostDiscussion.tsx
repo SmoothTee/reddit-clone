@@ -87,6 +87,7 @@ export const PostDiscussion = () => {
           title={post.title}
           community={community.name}
           username={user.username}
+          body={post.body}
           createdAt={post.created_at}
           numOfComments={numOfComments}
           sumOfVotes={sumOfVotes}

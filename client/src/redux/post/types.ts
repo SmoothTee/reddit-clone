@@ -46,6 +46,12 @@ export interface PostDiscussionState {
   isFetching: boolean;
 }
 
+export interface CommunityPostsState {
+  items: number[];
+  isFetching: boolean;
+  cursor: string | null;
+}
+
 interface CreatePostRequestAction {
   type: typeof CREATE_POST_REQUEST;
 }
@@ -70,6 +76,7 @@ interface ReadPostsSuccessAction {
   users: User[];
   communities: Community[];
   postVotes: PostVote[];
+  community?: string;
 }
 
 interface ReadPostsFailureAction {

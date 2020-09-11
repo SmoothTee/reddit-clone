@@ -10,7 +10,11 @@ import {
   CommentEntityState,
   CommentVoteEntityState,
 } from "./entities/types";
-import { HomePostsState, PostDiscussionState } from "./post/types";
+import {
+  CommunityPostsState,
+  HomePostsState,
+  PostDiscussionState,
+} from "./post/types";
 import { CommentsByPostState } from "./comment/types";
 
 interface RootState {
@@ -19,6 +23,9 @@ interface RootState {
   community: CommunityState;
   memberCommunity: MemberCommunityState;
   homePosts: HomePostsState;
+  postsByCommunity: {
+    [key: string]: CommunityPostsState;
+  };
   entities: {
     users: UserEntityState;
     communities: CommunityEntityState;
