@@ -1,7 +1,7 @@
 .container {
   display: flex;
   padding: 1rem;
-  border: 1px solid var(--grey);
+  border: 1px solid var(--darker-grey);
   border-radius: 3px;
 }
 

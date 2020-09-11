@@ -1,4 +1,8 @@
+import { User } from "../auth/types";
 import {
+  CREATE_COMMENT_FAILURE,
+  CREATE_COMMENT_REQUEST,
+  CREATE_COMMENT_SUCCESS,
   VOTE_COMMENT_FAILURE,
   VOTE_COMMENT_REQUEST,
   VOTE_COMMENT_SUCCESS,
@@ -6,6 +10,7 @@ import {
 
 export interface PostComment {
   parent_id?: number;
+  post_id: number;
   id: number;
   author_id: number;
   body: string;
@@ -48,7 +53,25 @@ interface VoteCommentFailureAction {
   error: any;
 }
 
+interface CreateCommentRequestAction {
+  type: typeof CREATE_COMMENT_REQUEST;
+}
+
+interface CreateCommentSuccessAction {
+  type: typeof CREATE_COMMENT_SUCCESS;
+  comment: PostComment;
+  user: User;
+}
+
+interface CreateCommentFailureAction {
+  type: typeof CREATE_COMMENT_FAILURE;
+  error: any;
+}
+
 export type CommentActionTypes =
   | VoteCommentRequestAction
   | VoteCommentSuccessAction
-  | VoteCommentFailureAction;
+  | VoteCommentFailureAction
+  | CreateCommentRequestAction
+  | CreateCommentSuccessAction
+  | CreateCommentFailureAction;

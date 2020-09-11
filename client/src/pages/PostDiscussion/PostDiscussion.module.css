@@ -9,3 +9,11 @@
   max-width: 40rem;
   width: 100%;
 }
+
+.wrapper > *:not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+.comments {
+  border: 1px solid var(--darker-grey);
+}

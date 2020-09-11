@@ -15,13 +15,9 @@ export const Home = () => {
   const { items: postItems, isFetching: isPostFetching } = useTypedSelector(
     (state) => state.homePosts
   );
-  const {
-    posts,
-    users,
-    communities,
-    postVotes,
-    commentVotes,
-  } = useTypedSelector((state) => state.entities);
+  const { posts, users, communities, postVotes } = useTypedSelector(
+    (state) => state.entities
+  );
   const {
     isFetching: isCommunityFetching,
     items: communityItems,
@@ -81,7 +77,6 @@ export const Home = () => {
               return null;
             }
             const community = communities.byId[cId];
-            const commentVote = commentVotes;
 
             return (
               <CommunityCard

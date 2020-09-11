@@ -15,7 +15,7 @@ interface CommentProps {
   authorId: number;
   createdAt: string;
   body: string;
-  depth: number;
+  parentId?: number;
   children?: PostComment[];
   commentVote?: CommentVote;
 }
@@ -25,7 +25,7 @@ export const Comment = ({
   authorId,
   createdAt,
   body,
-  depth,
+  parentId,
   children,
 }: CommentProps) => {
   const dispatch = useDispatch();
@@ -43,7 +43,7 @@ export const Comment = ({
         authorId={c.author_id}
         createdAt={c.created_at}
         body={c.body}
-        depth={c.depth}
+        parentId={c.parent_id}
         children={c.children}
       />
     );
@@ -61,9 +61,7 @@ export const Comment = ({
     : undefined;
 
   return (
-    <div
-      className={`${styles.container} ${depth !== 1 ? styles.no_padding : ""}`}
-    >
+    <div className={`${styles.container} ${parentId ? styles.no_padding : ""}`}>
       <div className={styles.sidebar}>
         <div className={styles.arrows}>
           <button

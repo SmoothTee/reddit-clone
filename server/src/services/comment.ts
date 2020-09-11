@@ -1,5 +1,7 @@
 import { db } from '../database';
 import { AppError } from '../utils/appError';
+import { userSerializer } from '../utils/serializer';
+import { User, UserWithoutPassword } from './auth';
 
 export interface Comment {
   id: number;
@@ -14,7 +16,7 @@ export interface Comment {
 export const createComment = async (
   data: Pick<Comment, 'body' | 'post_id' | 'parent_id'>,
   userId: number
-): Promise<Comment> => {
+): Promise<{ comment: Comment; user: UserWithoutPassword }> => {
   try {
     const comment = (
       await db<Comment>('comments').insert(
@@ -26,7 +28,15 @@ export const createComment = async (
       )
     )[0];
 
-    return comment;
+    const user = await db<User>('users')
+      .first()
+      .where({ id: comment.author_id });
+
+    if (!user) {
+      throw new AppError(404, 'User not found.');
+    }
+
+    return { comment, user: userSerializer(user) };
   } catch (err) {
     // Invalid post id or parent comment id.
     if (err.code === '23503') {

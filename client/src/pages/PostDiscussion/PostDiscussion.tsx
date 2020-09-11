@@ -9,6 +9,7 @@ import { useTypedSelector } from "../../redux/hooks";
 import { Comment } from "../../components/Comment";
 import { nestComments } from "../../utils/nestComments";
 import { NoComments } from "./components/NoComments";
+import { CommentEditor } from "../../components/CommentEditor";
 
 export const PostDiscussion = () => {
   const dispatch = useDispatch();
@@ -18,14 +19,9 @@ export const PostDiscussion = () => {
     post_title: string;
   }>();
 
-  const {
-    posts,
-    users,
-    comments,
-    communities,
-    postVotes,
-    commentVotes,
-  } = useTypedSelector((state) => state.entities);
+  const { posts, users, comments, communities, postVotes } = useTypedSelector(
+    (state) => state.entities
+  );
   const { item, isFetching } = useTypedSelector(
     (state) => state.postDiscussion
   );
@@ -73,7 +69,7 @@ export const PostDiscussion = () => {
           body={c.body}
           createdAt={c.created_at}
           authorId={c.author_id}
-          depth={c.depth}
+          parentId={c.parent_id}
           children={c.children}
         />
       );
@@ -95,6 +91,7 @@ export const PostDiscussion = () => {
           sumOfVotes={sumOfVotes}
           postVote={postVote}
         />
+        <CommentEditor postId={Number(post_id)} />
         <div className={styles.comments}>{nestedCommentsElement}</div>
       </div>
     </div>

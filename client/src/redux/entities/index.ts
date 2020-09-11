@@ -20,7 +20,10 @@ import { PostActionTypes, Post, PostVote } from "../post/types";
 import { ActionTypes } from "../types";
 import { User } from "../auth/types";
 import { CommentVote, PostComment } from "../comment/types";
-import { VOTE_COMMENT_SUCCESS } from "../comment/constants";
+import {
+  CREATE_COMMENT_SUCCESS,
+  VOTE_COMMENT_SUCCESS,
+} from "../comment/constants";
 
 const userInitialState: UserEntityState = {
   byId: {},
@@ -46,6 +49,13 @@ const users = (state = userInitialState, action: ActionTypes) => {
             acc[curr.id] = curr;
             return acc;
           }, {}),
+        },
+      };
+    case CREATE_COMMENT_SUCCESS:
+      return {
+        byId: {
+          ...state.byId,
+          [action.user.id]: action.user,
         },
       };
     default:
@@ -210,6 +220,13 @@ const comments = (state = commentsInitialState, action: ActionTypes) => {
             },
             {}
           ),
+        },
+      };
+    case CREATE_COMMENT_SUCCESS:
+      return {
+        byId: {
+          ...state.byId,
+          [action.comment.id]: action.comment,
         },
       };
     default:

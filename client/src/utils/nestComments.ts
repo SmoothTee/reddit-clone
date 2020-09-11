@@ -9,14 +9,16 @@ export const nestComments = (c: PostComment[]) => {
 
   // iterate over the comments again and correctly nest the children
   comments.forEach((comment) => {
-    if (comment.depth !== 1 && comment.parent_id) {
+    if (comment.parent_id) {
       const parent = commentMap[comment.parent_id];
       (parent.children = parent.children || []).push(comment);
     }
   });
 
   // filter the list to return a list of correctly nested comments
-  return comments.filter((comment) => {
-    return comment.depth === 1;
-  });
+  return comments
+    .filter((comment) => {
+      return comment.parent_id === null;
+    })
+    .sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
 };
