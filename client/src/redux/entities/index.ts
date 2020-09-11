@@ -40,7 +40,10 @@ const users = (state = userInitialState, action: ActionTypes) => {
       return {
         byId: {
           ...state.byId,
-          [action.user.id]: action.user,
+          ...action.users.reduce((acc: { [key: number]: User }, curr) => {
+            acc[curr.id] = curr;
+            return acc;
+          }, {}),
         },
       };
     default:

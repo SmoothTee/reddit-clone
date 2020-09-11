@@ -80,14 +80,14 @@ const readPostRequest = () => ({
 const readPostSuccess = (data: {
   post: Post;
   community: Community;
-  user: User;
+  users: User[];
   comments: PostComment[];
   postVotes: PostVote[];
 }) => ({
   type: READ_POST_SUCCESS,
   post: data.post,
   community: data.community,
-  user: data.user,
+  users: data.users,
   comments: data.comments,
   postVotes: data.postVotes,
 });

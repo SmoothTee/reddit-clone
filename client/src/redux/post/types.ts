@@ -84,7 +84,7 @@ interface ReadPostRequestAction {
 interface ReadPostSuccessAction {
   type: typeof READ_POST_SUCCESS;
   post: Post;
-  user: User;
+  users: User[];
   community: Community;
   comments: PostComment[];
   postVotes: PostVote[];

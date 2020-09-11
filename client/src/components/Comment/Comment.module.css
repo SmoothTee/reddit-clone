@@ -1,0 +1,102 @@
+.container {
+  display: flex;
+  padding: 1rem;
+}
+
+.no_padding {
+  padding: 0;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 1rem;
+}
+
+.arrows {
+  display: flex;
+  flex-direction: column;
+}
+
+.vote_button {
+  display: flex;
+  padding: 0.3rem;
+  border-radius: 3px;
+  border: none;
+  background: none;
+}
+
+.vote_button:hover {
+  background: var(--grey);
+  cursor: pointer;
+}
+
+.arrows > *:not(:last-child) {
+  margin-bottom: 0.1rem;
+}
+
+.vertical_line {
+  width: 1px;
+  height: 100%;
+  background: var(--grey);
+  margin-top: 1rem;
+}
+
+.vertical_line:hover {
+  cursor: pointer;
+  background: var(--darker-grey);
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+}
+
+.main > *:not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+}
+
+.header > *:not(:last-child) {
+  margin-right: 0.5rem;
+}
+
+.username {
+  color: inherit;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.username:hover {
+  text-decoration: underline;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+}
+
+.footer_button {
+  display: flex;
+  align-items: center;
+  padding: 0.3rem;
+  border-radius: 3px;
+  border: none;
+  background: none;
+}
+
+.footer_button:hover {
+  background: var(--grey);
+  cursor: pointer;
+}
+
+.button_text {
+  margin-left: 0.3rem;
+  font-weight: 700;
+}

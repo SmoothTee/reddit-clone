@@ -6,10 +6,16 @@ import styles from "./PostDiscussion.module.css";
 import { readPostAction } from "../../redux/post/actions";
 import { PostCard } from "../../components/PostCard";
 import { useTypedSelector } from "../../redux/hooks";
+import { Comment } from "../../components/Comment";
+import { nestComments } from "../../utils/nestComments";
 
 export const PostDiscussion = () => {
   const dispatch = useDispatch();
-  const { community_name, post_id, post_title } = useParams();
+  const { community_name, post_id, post_title } = useParams<{
+    community_name: string;
+    post_id: string;
+    post_title: string;
+  }>();
 
   const { posts, users, comments, communities, postVotes } = useTypedSelector(
     (state) => state.entities
@@ -20,7 +26,7 @@ export const PostDiscussion = () => {
   const commentsByPost = useTypedSelector((state) => state.commentsByPost);
 
   useEffect(() => {
-    dispatch(readPostAction(post_id, community_name, post_title));
+    dispatch(readPostAction(Number(post_id), community_name, post_title));
   }, [dispatch, post_id, community_name, post_title]);
 
   if (isFetching || !item) {
@@ -39,6 +45,13 @@ export const PostDiscussion = () => {
     },
     0
   );
+  const nestedComments = nestComments(
+    commentsByPost[post.id].items.map((commentId) => {
+      const comment = comments.byId[commentId];
+
+      return comment;
+    })
+  );
 
   return (
     <div className={styles.container}>
@@ -53,7 +66,18 @@ export const PostDiscussion = () => {
           sumOfVotes={sumOfVotes}
         />
         <div className={styles.comments}>
-          <span>Comment</span>
+          {nestedComments.map((c) => {
+            return (
+              <Comment
+                key={c.id}
+                body={c.body}
+                createdAt={c.created_at}
+                authorId={c.author_id}
+                depth={c.depth}
+                children={c.children}
+              />
+            );
+          })}
         </div>
       </div>
     </div>

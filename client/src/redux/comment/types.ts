@@ -7,6 +7,7 @@ export interface PostComment {
   depth: number;
   created_at: string;
   updated_at: string;
+  children?: PostComment[];
 }
 
 export interface CommentState {

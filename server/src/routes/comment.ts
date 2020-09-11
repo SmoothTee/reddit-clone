@@ -22,7 +22,7 @@ router.post(
 );
 
 router.get('/mit', async (req, res) => {
-  const comments = db
+  const comments = await db
     .withRecursive('cte', (qb) => {
       qb.select(
         'comments.id',

@@ -1,7 +1,7 @@
 import { db } from '../database';
 import { AppError } from '../utils/appError';
 
-interface Comment {
+export interface Comment {
   id: number;
   parent_id?: number;
   post_id: number;

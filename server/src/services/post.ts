@@ -6,6 +6,7 @@ import { User, UserWithoutPassword } from './auth';
 import { Community } from './community';
 import { userSerializer } from '../utils/serializer';
 import { CommunityMember } from './community';
+import { Comment } from './comment';
 
 interface Post {
   id: number;
@@ -169,7 +170,11 @@ export const readPost = async (
   postId: number,
   communityName: string,
   postTitle: string
-): Promise<{ post: Post; user: UserWithoutPassword; community: Community }> => {
+): Promise<{
+  post: Post;
+  users: UserWithoutPassword[];
+  community: Community;
+}> => {
   const data = await db.transaction(async (trx) => {
     const post = await trx('posts')
       .first('posts.*', 'communities.name as community')
@@ -177,7 +182,6 @@ export const readPost = async (
       .andWhere('title', 'like', `${postTitle}%`)
       .leftJoin('communities', 'communities.id', 'posts.community_id');
 
-    const user = await trx('users').first().where('id', post.author_id);
     const community = await trx('communities')
       .first()
       .where('id', post.community_id);
@@ -189,6 +193,7 @@ export const readPost = async (
           'comments.parent_id',
           'comments.author_id',
           'comments.body',
+          'comments.created_at',
           trx.raw('array[id] as path'),
           trx.raw('1 as depth')
         )
@@ -200,6 +205,7 @@ export const readPost = async (
               'c.parent_id',
               'c.author_id',
               'c.body',
+              'c.created_at',
               trx.raw('cte.path || c.id'),
               trx.raw('cte.depth + 1 as depth')
             )
@@ -211,11 +217,25 @@ export const readPost = async (
       .from('cte')
       .orderBy('path');
 
+    const uniqueUserIds = [
+      ...new Set((comments as Comment[]).map((c) => c.author_id)),
+    ];
+
+    const users = await trx('users')
+      .select()
+      .whereIn('id', [post.author_id, ...uniqueUserIds]);
+
     const postVotes = await trx<PostVote>('post_votes')
       .select()
       .where('post_id', post.id);
 
-    return { post, user: userSerializer(user), community, comments, postVotes };
+    return {
+      post,
+      users: users.map(userSerializer),
+      community,
+      comments,
+      postVotes,
+    };
   });
   return data;
 };
