@@ -64,15 +64,20 @@ export const voteCommentAction = (body: {
   }
 };
 
-export const createCommentAction = (body: {
-  post_id: number;
-  body: string;
-}): AppThunk => async (dispatch) => {
+export const createCommentAction = (
+  body: {
+    parent_id?: number;
+    post_id: number;
+    body: string;
+  },
+  cb: () => void
+): AppThunk => async (dispatch) => {
   try {
     dispatch(createCommentRequest());
     const { success, res } = await clientFetch("/api/comment", { body });
     if (success) {
       dispatch(createCommentSuccess(res));
+      cb();
     } else {
       dispatch(createCommentFailure(res));
     }

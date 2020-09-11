@@ -66,6 +66,7 @@ export const PostDiscussion = () => {
         <Comment
           key={c.id}
           id={c.id}
+          postId={Number(post_id)}
           body={c.body}
           createdAt={c.created_at}
           authorId={c.author_id}
@@ -91,7 +92,10 @@ export const PostDiscussion = () => {
           sumOfVotes={sumOfVotes}
           postVote={postVote}
         />
-        <CommentEditor postId={Number(post_id)} />
+        <CommentEditor
+          postId={Number(post_id)}
+          cb={() => console.log("Comment created")}
+        />
         <div className={styles.comments}>{nestedCommentsElement}</div>
       </div>
     </div>

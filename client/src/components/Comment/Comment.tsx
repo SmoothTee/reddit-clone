@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import moment from "moment";
 import { ImArrowDown, ImArrowUp } from "react-icons/im";
 import { Link } from "react-router-dom";
@@ -9,9 +9,11 @@ import { CommentVote, PostComment } from "../../redux/comment/types";
 import { useTypedSelector } from "../../redux/hooks";
 import { useDispatch } from "react-redux";
 import { voteCommentAction } from "../../redux/comment/actions";
+import { CommentEditor } from "../CommentEditor";
 
 interface CommentProps {
   id: number;
+  postId: number;
   authorId: number;
   createdAt: string;
   body: string;
@@ -22,6 +24,7 @@ interface CommentProps {
 
 export const Comment = ({
   id,
+  postId,
   authorId,
   createdAt,
   body,
@@ -29,6 +32,8 @@ export const Comment = ({
   children,
 }: CommentProps) => {
   const dispatch = useDispatch();
+
+  const [showEditor, setShowEditor] = useState(false);
 
   const { users, commentVotes } = useTypedSelector((state) => state.entities);
   const session = useTypedSelector((state) => state.auth.session);
@@ -40,6 +45,7 @@ export const Comment = ({
       <Comment
         id={c.id}
         key={c.id}
+        postId={postId}
         authorId={c.author_id}
         createdAt={c.created_at}
         body={c.body}
@@ -102,11 +108,21 @@ export const Comment = ({
           dangerouslySetInnerHTML={{ __html: body }}
         />
         <div className={styles.footer}>
-          <button className={styles.footer_button}>
+          <button
+            className={styles.footer_button}
+            onClick={() => setShowEditor(!showEditor)}
+          >
             <MdChatBubble />
             <span className={styles.button_text}>Reply</span>
           </button>
         </div>
+        {showEditor ? (
+          <CommentEditor
+            postId={postId}
+            parentId={id}
+            cb={() => setShowEditor(false)}
+          />
+        ) : null}
         {nestedComments}
       </div>
     </div>

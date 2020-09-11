@@ -8,16 +8,20 @@ import styles from "./CommentEditor.module.css";
 
 interface CommentEditorProps {
   postId: number;
+  parentId?: number;
+  cb: () => void;
 }
 
-export const CommentEditor = ({ postId }: CommentEditorProps) => {
+export const CommentEditor = ({ postId, parentId, cb }: CommentEditorProps) => {
   const dispatch = useDispatch();
   const [body, setBody] = useState("");
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
 
-    dispatch(createCommentAction({ post_id: postId, body }));
+    dispatch(
+      createCommentAction({ parent_id: parentId, post_id: postId, body }, cb)
+    );
   };
 
   return (
