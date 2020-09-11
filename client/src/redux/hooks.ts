@@ -8,6 +8,7 @@ import {
   PostEntityState,
   PostVoteEntityState,
   CommentEntityState,
+  CommentVoteEntityState,
 } from "./entities/types";
 import { HomePostsState, PostDiscussionState } from "./post/types";
 import { CommentsByPostState } from "./comment/types";
@@ -24,6 +25,7 @@ interface RootState {
     posts: PostEntityState;
     postVotes: PostVoteEntityState;
     comments: CommentEntityState;
+    commentVotes: CommentVoteEntityState;
   };
   postDiscussion: PostDiscussionState;
   commentsByPost: CommentsByPostState;

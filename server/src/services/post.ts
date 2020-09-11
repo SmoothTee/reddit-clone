@@ -7,6 +7,7 @@ import { Community } from './community';
 import { userSerializer } from '../utils/serializer';
 import { CommunityMember } from './community';
 import { Comment } from './comment';
+import { CommentVote } from './comment';
 
 interface Post {
   id: number;
@@ -199,6 +200,7 @@ export const readPost = async (
         )
           .from('comments')
           .where('parent_id', null)
+          .andWhere('post_id', post.id)
           .union((qb) => {
             qb.select(
               'c.id',
@@ -220,6 +222,7 @@ export const readPost = async (
     const uniqueUserIds = [
       ...new Set((comments as Comment[]).map((c) => c.author_id)),
     ];
+    const commentIds = (comments as Comment[]).map((c) => c.id);
 
     const users = await trx('users')
       .select()
@@ -229,12 +232,17 @@ export const readPost = async (
       .select()
       .where('post_id', post.id);
 
+    const commentVotes = await trx<CommentVote>('comment_votes')
+      .select()
+      .whereIn('comment_id', commentIds);
+
     return {
-      post,
       users: users.map(userSerializer),
       community,
-      comments,
+      post,
       postVotes,
+      comments,
+      commentVotes,
     };
   });
   return data;

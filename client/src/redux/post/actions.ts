@@ -17,7 +17,7 @@ import {
 import { Post, PostVote, PostActionTypes } from "./types";
 import { User } from "../auth/types";
 import { Community } from "../community/types";
-import { PostComment } from "../comment/types";
+import { CommentVote, PostComment } from "../comment/types";
 
 const createPostRequest = (): PostActionTypes => ({
   type: CREATE_POST_REQUEST,
@@ -78,18 +78,20 @@ const readPostRequest = () => ({
 });
 
 const readPostSuccess = (data: {
-  post: Post;
-  community: Community;
   users: User[];
-  comments: PostComment[];
+  community: Community;
+  post: Post;
   postVotes: PostVote[];
+  comments: PostComment[];
+  commentVotes: CommentVote[];
 }) => ({
   type: READ_POST_SUCCESS,
-  post: data.post,
-  community: data.community,
   users: data.users,
-  comments: data.comments,
+  community: data.community,
+  post: data.post,
   postVotes: data.postVotes,
+  comments: data.comments,
+  commentVotes: data.commentVotes,
 });
 
 const readPostFailure = (error: any) => ({

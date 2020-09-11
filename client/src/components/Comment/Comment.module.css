@@ -100,3 +100,11 @@
   margin-left: 0.3rem;
   font-weight: 700;
 }
+
+.blue {
+  color: var(--blue);
+}
+
+.red {
+  color: var(--red);
+}

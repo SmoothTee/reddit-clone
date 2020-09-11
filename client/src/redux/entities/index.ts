@@ -8,6 +8,7 @@ import {
   UserEntityState,
   PostVoteEntityState,
   CommentEntityState,
+  CommentVoteEntityState,
 } from "./types";
 import {
   CREATE_POST_SUCCESS,
@@ -18,7 +19,8 @@ import {
 import { PostActionTypes, Post, PostVote } from "../post/types";
 import { ActionTypes } from "../types";
 import { User } from "../auth/types";
-import { PostComment } from "../comment/types";
+import { CommentVote, PostComment } from "../comment/types";
+import { VOTE_COMMENT_SUCCESS } from "../comment/constants";
 
 const userInitialState: UserEntityState = {
   byId: {},
@@ -215,10 +217,69 @@ const comments = (state = commentsInitialState, action: ActionTypes) => {
   }
 };
 
+const commentVotesInitialState: CommentVoteEntityState = {
+  byCommentId: {},
+};
+
+const commentVotes = (
+  state = commentVotesInitialState,
+  action: ActionTypes
+) => {
+  switch (action.type) {
+    case READ_POST_SUCCESS:
+      return {
+        byCommentId: {
+          ...state.byCommentId,
+          ...action.commentVotes.reduce(
+            (acc: { [key: number]: { [key: number]: CommentVote } }, curr) => {
+              acc[curr.comment_id] = acc[curr.comment_id]
+                ? { ...acc[curr.comment_id], [curr.user_id]: curr }
+                : { [curr.user_id]: curr };
+              return acc;
+            },
+            {}
+          ),
+        },
+      };
+    case VOTE_COMMENT_SUCCESS:
+      const { commentVote, voteAction } = action;
+      if (voteAction === "c" || voteAction === "u") {
+        const updated = state.byCommentId[commentVote.comment_id]
+          ? {
+              ...state.byCommentId[commentVote.comment_id],
+              [commentVote.user_id]: commentVote,
+            }
+          : { [commentVote.user_id]: commentVote };
+
+        return {
+          byCommentId: {
+            ...state.byCommentId,
+            [commentVote.comment_id]: updated,
+          },
+        };
+      }
+      if (voteAction === "d") {
+        const { [commentVote.user_id]: omit, ...rest } = state.byCommentId[
+          commentVote.comment_id
+        ];
+        return {
+          byCommentId: {
+            ...state.byCommentId,
+            [commentVote.comment_id]: rest,
+          },
+        };
+      }
+      break;
+    default:
+      return state;
+  }
+};
+
 export const entities = combineReducers({
   users,
   communities,
   posts,
   postVotes,
   comments,
+  commentVotes,
 });

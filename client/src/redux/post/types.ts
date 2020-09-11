@@ -14,7 +14,7 @@ import {
 } from "./constants";
 import { Community } from "../community/types";
 import { User } from "../auth/types";
-import { PostComment } from "../comment/types";
+import { CommentVote, PostComment } from "../comment/types";
 
 export interface Post {
   id: number;
@@ -86,8 +86,9 @@ interface ReadPostSuccessAction {
   post: Post;
   users: User[];
   community: Community;
-  comments: PostComment[];
   postVotes: PostVote[];
+  comments: PostComment[];
+  commentVotes: CommentVote[];
 }
 
 interface ReadPostFailureAction {

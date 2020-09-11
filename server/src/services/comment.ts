@@ -67,7 +67,7 @@ export const createComment = async (
   }
 };
 
-interface CommentVote {
+export interface CommentVote {
   user_id: number;
   comment_id: number;
   vote: number;

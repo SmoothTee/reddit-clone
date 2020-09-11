@@ -1,6 +1,7 @@
 import { PostComment } from "../redux/comment/types";
 
-export const nestComments = (comments: PostComment[]) => {
+export const nestComments = (c: PostComment[]) => {
+  const comments = c.map((a) => ({ ...a }));
   const commentMap: { [key: number]: PostComment } = {};
 
   // move all the comments into a map of id => comment
