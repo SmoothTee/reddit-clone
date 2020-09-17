@@ -6,3 +6,19 @@
 .form > button {
   align-self: flex-end;
 }
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid var(--darker-grey);
+  padding: 1rem 2rem;
+}
+
+.text {
+  font-weight: 700;
+}
+
+.buttons > *:not(:last-child) {
+  margin-right: 1rem;
+}
