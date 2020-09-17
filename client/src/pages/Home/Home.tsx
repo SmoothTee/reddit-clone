@@ -29,6 +29,10 @@ export const Home = () => {
     (state) => state.memberCommunity.items
   );
 
+  const filteredCommunityItems = communityItems.filter(
+    (cId) => !memberCommunity.includes(cId)
+  );
+
   useEffect(() => {
     dispatch(readPostsAction());
     dispatch(readCommunitiesAction(true));
@@ -73,9 +77,8 @@ export const Home = () => {
       );
     });
 
-    communityFeed = communityItems
-      .filter((cId) => !memberCommunity.includes(cId))
-      .map((cId) => {
+    communityFeed = filteredCommunityItems.length ? (
+      filteredCommunityItems.map((cId) => {
         const community = communities.byId[cId];
 
         return (
@@ -86,7 +89,12 @@ export const Home = () => {
             numOfMembers={community.numOfMembers}
           />
         );
-      });
+      })
+    ) : (
+      <span className={styles.community_text}>
+        You have already joined all communities.
+      </span>
+    );
   }
 
   return (

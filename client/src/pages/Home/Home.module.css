@@ -35,3 +35,9 @@
 .box_header {
   font-weight: 700;
 }
+
+.community_text {
+  font-size: 0.8rem;
+  font-style: italic;
+  text-align: center;
+}
