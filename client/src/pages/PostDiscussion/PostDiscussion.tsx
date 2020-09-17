@@ -32,7 +32,7 @@ export const PostDiscussion = () => {
     dispatch(readPostAction(Number(post_id), community_name, post_title));
   }, [dispatch, post_id, community_name, post_title]);
 
-  if (isFetching || !item) {
+  if (isFetching || !item || item !== Number(post_id)) {
     return <span>Loading</span>;
   }
 

@@ -2,7 +2,6 @@
   display: flex;
   padding: 1rem;
   border: 1px solid var(--darker-grey);
-  border-radius: 3px;
 }
 
 .container:hover {
@@ -28,6 +27,7 @@
   border-radius: 3px;
   border: none;
   background: none;
+  outline: none;
 }
 
 .vote_button:hover {

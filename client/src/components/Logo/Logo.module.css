@@ -1,8 +1,15 @@
-.logo_link {
+.link {
+  display: flex;
+  align-items: center;
   color: inherit;
   text-decoration: none;
 }
 
-.logo_text {
+.icon {
+  font-size: 2rem;
+}
+
+.text {
+  font-size: 1.5rem;
   font-weight: 700;
 }

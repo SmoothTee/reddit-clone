@@ -37,6 +37,14 @@ export const postsByCommunity = (
   action: PostActionTypes
 ) => {
   switch (action.type) {
+    case READ_POSTS_REQUEST:
+      if (!action.community) {
+        return state;
+      }
+      return {
+        ...state,
+        [action.community]: posts(state[action.community], action),
+      };
     case READ_POSTS_SUCCESS:
       if (!action.community) {
         return state;

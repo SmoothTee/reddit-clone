@@ -7,8 +7,6 @@
   flex-direction: column;
   text-align: center;
   padding: 2rem;
-  border: 1px solid black;
-  border-radius: 3px;
   background: var(--white);
   max-width: 20rem;
   width: 100%;

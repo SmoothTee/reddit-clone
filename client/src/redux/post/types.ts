@@ -68,6 +68,7 @@ interface CreatePostFailureAction {
 
 interface ReadPostsRequestAction {
   type: typeof READ_POSTS_REQUEST;
+  community?: string;
 }
 
 interface ReadPostsSuccessAction {

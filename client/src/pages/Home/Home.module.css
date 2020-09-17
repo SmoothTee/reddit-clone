@@ -24,8 +24,7 @@
   top: calc(var(--header-height) + 1rem);
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--grey);
-  border-radius: 3px;
+  border: 1px solid var(--darker-grey);
   padding: 1rem;
 }
 

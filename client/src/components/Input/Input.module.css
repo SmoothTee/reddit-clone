@@ -3,7 +3,6 @@
   display: flex;
   align-items: center;
   border: 1px solid var(--darker-grey);
-  border-radius: 3px;
   background: white;
 }
 
@@ -27,7 +26,7 @@
 .label {
   position: absolute;
   left: 0.8rem;
-  top: 0.6rem;
+  top: 0.5rem;
   color: var(--dark-grey);
   pointer-events: none;
   transition: top 0.3s ease-in-out;
@@ -43,6 +42,7 @@
 
 .toggle_password {
   display: flex;
+  outline: none;
   background: none;
   border: none;
 }
@@ -57,5 +57,5 @@
 }
 
 .input:not(:placeholder-shown).input {
-  padding: 0.75rem 0.8rem 0.25rem;
+  padding: 0.85rem 0.8rem 0.15rem;
 }

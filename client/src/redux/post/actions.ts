@@ -33,8 +33,9 @@ const createPostFailure = (error: any): PostActionTypes => ({
   error,
 });
 
-const readPostsRequest = (): PostActionTypes => ({
+const readPostsRequest = (community?: string): PostActionTypes => ({
   type: READ_POSTS_REQUEST,
+  community,
 });
 
 const readPostsSuccess = (

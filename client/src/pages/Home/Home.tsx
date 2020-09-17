@@ -7,6 +7,9 @@ import { useTypedSelector } from "../../redux/hooks";
 import { PostCard } from "../../components/PostCard";
 import { CommunityCard } from "../../components/CommunityCard";
 import { readCommunitiesAction } from "../../redux/community/actions";
+import { PostCardSkeleton } from "../../components/PostCardSkeleton";
+import { renderNTimes } from "../../utils/renderNTimes";
+import { CommunityCardSkeleton } from "../../components/CommunityCardSkeleton";
 
 export const Home = () => {
   const dispatch = useDispatch();
@@ -31,62 +34,68 @@ export const Home = () => {
     dispatch(readCommunitiesAction(true));
   }, [dispatch]);
 
-  if (isPostFetching && isCommunityFetching && postItems.length === 0) {
-    return <span>Loading</span>;
+  let postFeed;
+  let communityFeed;
+
+  if (isPostFetching && isCommunityFetching) {
+    postFeed = renderNTimes(<PostCardSkeleton />);
+
+    communityFeed = renderNTimes(<CommunityCardSkeleton />);
+  } else {
+    postFeed = postItems.map((pId) => {
+      const post = posts.byId[pId];
+      const sumOfVotes = postVotes.byPostId[pId]
+        ? Object.values(postVotes.byPostId[pId]).reduce((acc, curr) => {
+            acc += curr.vote;
+            return acc;
+          }, 0)
+        : 0;
+      const community = communities.byId[post.community_id];
+      const username = users.byId[post.author_id].username;
+      const postVote =
+        postVotes.byPostId[pId] && session
+          ? postVotes.byPostId[pId][session.id]
+          : undefined;
+
+      return (
+        <PostCard
+          key={post.id}
+          id={post.id}
+          postVote={postVote}
+          sumOfVotes={sumOfVotes}
+          community={community.name}
+          body={post.body}
+          username={username}
+          createdAt={post.created_at}
+          title={post.title}
+          numOfComments={post.numOfComments}
+        />
+      );
+    });
+
+    communityFeed = communityItems
+      .filter((cId) => !memberCommunity.includes(cId))
+      .map((cId) => {
+        const community = communities.byId[cId];
+
+        return (
+          <CommunityCard
+            key={community.id}
+            id={community.id}
+            name={community.name}
+            numOfMembers={community.numOfMembers}
+          />
+        );
+      });
   }
 
   return (
     <div className={styles.container}>
-      <div className={styles.posts}>
-        {postItems.map((pId) => {
-          const post = posts.byId[pId];
-          const sumOfVotes = postVotes.byPostId[pId]
-            ? Object.values(postVotes.byPostId[pId]).reduce((acc, curr) => {
-                acc += curr.vote;
-                return acc;
-              }, 0)
-            : 0;
-          const community = communities.byId[post.community_id];
-          const username = users.byId[post.author_id].username;
-          const postVote =
-            postVotes.byPostId[pId] && session
-              ? postVotes.byPostId[pId][session.id]
-              : undefined;
-
-          return (
-            <PostCard
-              key={post.id}
-              id={post.id}
-              postVote={postVote}
-              sumOfVotes={sumOfVotes}
-              community={community.name}
-              body={post.body}
-              username={username}
-              createdAt={post.created_at}
-              title={post.title}
-              numOfComments={post.numOfComments}
-            />
-          );
-        })}
-      </div>
+      <div className={styles.posts}>{postFeed}</div>
       <aside className={styles.sidebar}>
         <div className={styles.box}>
           <span className={styles.box_header}>Communities</span>
-          {communityItems.map((cId) => {
-            if (memberCommunity.includes(cId)) {
-              return null;
-            }
-            const community = communities.byId[cId];
-
-            return (
-              <CommunityCard
-                key={community.id}
-                id={community.id}
-                name={community.name}
-                numOfMembers={community.numOfMembers}
-              />
-            );
-          })}
+          {communityFeed}
         </div>
       </aside>
     </div>

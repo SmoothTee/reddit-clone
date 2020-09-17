@@ -23,7 +23,10 @@ export const Community = () => {
 
   const postIds = postsByCommunity[community_name];
 
-  if (!postsByCommunity[community_name]) {
+  if (
+    !postsByCommunity[community_name] ||
+    postsByCommunity[community_name].isFetching
+  ) {
     return <span>Loading</span>;
   }
 
